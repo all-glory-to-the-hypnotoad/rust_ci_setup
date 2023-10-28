@@ -1,0 +1,37 @@
+#
+# templates
+#
+
+cpu_and_memory_config_for_builds_template: &CPU_AND_MEMORY_CONFIG_FOR_BUILDS_TEMPLATE
+  cpu: 4
+  memory: 8GB
+
+#
+# Basic tests
+#
+
+task:
+  name: Ubuntu 22.04 x64 # $RUST_TOOLCHAIN
+  matrix:
+    - RUST_TOOLCHAIN: stable
+    - RUST_TOOLCHAIN: beta
+    - RUST_TOOLCHAIN: nightly
+  allow_failures: $RUST_TOOLCHAIN == "nightly"
+  container:
+    dockerfile: internal/docker/ubuntu-22.04
+    << : *CPU_AND_MEMORY_CONFIG_FOR_BUILDS_TEMPLATE
+  #registry_cache:
+  #  folder: $CARGO_HOME/registry
+  #  fingerprint_script: cat Cargo.lock
+  #target_cache:
+  #  folder: target
+  #  fingerprint_script:
+  #    - rustc --version
+  #    - cat Cargo.lock
+  build_script: 
+    - echo "$RUST_TOOLCHAIN"
+    - rustup default $RUST_TOOLCHAIN
+    - cargo build --all
+  test_script: cargo test --all
+    #before_cache_script: rm -rf $CARGO_HOME/registry/index
+
