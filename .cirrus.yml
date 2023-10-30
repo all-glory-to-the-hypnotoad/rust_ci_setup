@@ -15,11 +15,11 @@
 
 ---
 
-ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST_TEMPLATE: &ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST_TEMPLATE
+elk_common_cpu_and_memory_config_for_build_and_test_template: &ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
   cpu: 4
   memory: 4GB
 
-ELK_COMMON_BUILD_AND_TEST_TEMPLATE: &ELK_COMMON_BUILD_AND_TEST_TEMPLATE
+elk_common_build_and_test_template: &ELK_COMMON_BUILD_AND_TEST
   set_toolchain_script: rustup default $ELK_RUST_TOOLCHAIN
   doc_script: RUSTDOCFLAGS="-D warnings" cargo doc
   build_script: cargo build $ELK_BUILD_TYPE --workspace --all --examples
@@ -34,7 +34,7 @@ preflight_check_task:
   ELK_BUILD_TYPE:  # empty because there is no '--debug' flag
   container:
     dockerfile: internal/docker/ubuntu-22.04
-    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST_TEMPLATE
+    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
   # registry_cache:
   #   folder: $CARGO_HOME/registry
   #   fingerprint_script: cat Cargo.lock
@@ -43,7 +43,7 @@ preflight_check_task:
   #   fingerprint_script:
   #     - rustc --version
   #     - cat Cargo.lock
-  <<: *ELK_COMMON_BUILD_AND_TEST_TEMPLATE
+  <<: *ELK_COMMON_BUILD_AND_TEST
   # before_cache_script: rm -rf $CARGO_HOME/registry/index
 
 ubuntu_22_04_x64_beta_debug_task:
@@ -52,33 +52,33 @@ ubuntu_22_04_x64_beta_debug_task:
   ELK_BUILD_TYPE:  # empty because there is no '--debug' flag
   container:
     dockerfile: internal/docker/ubuntu-22.04
-    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST_TEMPLATE
-  <<: *ELK_COMMON_BUILD_AND_TEST_TEMPLATE
+    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+  <<: *ELK_COMMON_BUILD_AND_TEST
 
-task Ubuntu 22.04 [x64] [nightly] [debug]:
+ubuntu_22_04_x64_nightly_debug_task:
   depends_on: ubuntu_22_04_x64_beta_debug
   ELK_RUST_TOOLCHAIN: nightly
   ELK_BUILD_TYPE:  # empty because there is no '--debug' flag
   allow_failures: true
   container:
     dockerfile: internal/docker/ubuntu-22.04
-    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST_TEMPLATE
-  <<: *ELK_COMMON_BUILD_AND_TEST_TEMPLATE
+    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+  <<: *ELK_COMMON_BUILD_AND_TEST
 
-task Ubuntu 22.04 [aarch64] [stable] [release]:
+ubuntu_22_04_aarch64_stable_release_task:
   depends_on: preflight_check
   ELK_RUST_TOOLCHAIN: stable
   ELK_BUILD_TYPE: --release
   arm_container:
     dockerfile: internal/docker/ubuntu-22.04
-    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST_TEMPLATE
-  <<: *ELK_COMMON_BUILD_AND_TEST_TEMPLATE
+    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+  <<: *ELK_COMMON_BUILD_AND_TEST
 
-task Arch Linux [x64] [stable] [release]:
+archlinux_x64_stable_release:
   depends_on: preflight_check
   ELK_RUST_TOOLCHAIN: stable
   ELK_BUILD_TYPE: --release
   container:
     dockerfile: internal/docker/archlinux-base-devel
-    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST_TEMPLATE
-  <<: *ELK_COMMON_BUILD_AND_TEST_TEMPLATE
+    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+  <<: *ELK_COMMON_BUILD_AND_TEST
