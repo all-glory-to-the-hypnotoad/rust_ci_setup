@@ -23,7 +23,7 @@ common_build_and_test_template: &COMMON_BUILD_AND_TEST_TEMPLATE
   test_script: cargo test $ELK_BUILD_TYPE --workspace --all
 
 #
-# Basic tests
+# Ubuntu x86
 #
 
 task:
@@ -49,7 +49,6 @@ task:
   depends_on: Ubuntu 22.04 [x64] [stable] [debug]
   ELK_RUST_TOOLCHAIN: beta
   ELK_BUILD_TYPE: # empty because there is no '--debug' flag
-  allow_failures: true
   container:
     dockerfile: internal/docker/ubuntu-22.04
     << : *CPU_AND_MEMORY_CONFIG_FOR_BUILDS_TEMPLATE
@@ -67,11 +66,21 @@ task:
   << : &COMMON_BUILD_AND_TEST_TEMPLATE
 
 task:
-  name: Arch Linux [aarch64] [stable] [release]
   depends_on: Ubuntu 22.04 [x64] [stable] [debug]
+  name: Ubuntu 22.04 [aarch64] [stable] [release]
   ELK_RUST_TOOLCHAIN: stable
   ELK_BUILD_TYPE: --release
   arm_container:
+    dockerfile: internal/docker/ubuntu-22.04
+    << : *CPU_AND_MEMORY_CONFIG_FOR_BUILDS_TEMPLATE
+  << : &COMMON_BUILD_AND_TEST_TEMPLATE
+
+task:
+  name: Arch Linux [x64] [stable] [release]
+  depends_on: Ubuntu 22.04 [x64] [stable] [debug]
+  ELK_RUST_TOOLCHAIN: stable
+  ELK_BUILD_TYPE: --release
+  container:
     dockerfile: internal/docker/archlinux-base-devel
     << : *CPU_AND_MEMORY_CONFIG_FOR_BUILDS_TEMPLATE
   << : &COMMON_BUILD_AND_TEST_TEMPLATE
