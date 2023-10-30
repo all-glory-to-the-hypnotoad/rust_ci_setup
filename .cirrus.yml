@@ -67,8 +67,8 @@ task:
   << : &COMMON_BUILD_AND_TEST_TEMPLATE
 
 task:
-  name: Aarch Linux [aarch64] [stable] [release]
-  depends_on: Ubuntu 22.04 [x64] [stable] [release]
+  name: Arch Linux [aarch64] [stable] [release]
+  depends_on: Ubuntu 22.04 [x64] [stable] [debug]
   ELK_RUST_TOOLCHAIN: stable
   ELK_BUILD_TYPE: --release
   arm_container:
