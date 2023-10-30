@@ -53,9 +53,7 @@ ubuntu_22_04_x64_beta_debug_task:
   container:
     dockerfile: internal/docker/ubuntu-22.04
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST_TEMPLATE
-  scripts:
-    <<: *ELK_COMMON_BUILD_AND_TEST_TEMPLATE
-  # dummy
+  <<: *ELK_COMMON_BUILD_AND_TEST_TEMPLATE
 
 task Ubuntu 22.04 [x64] [nightly] [debug]:
   depends_on: ubuntu_22_04_x64_beta_debug
