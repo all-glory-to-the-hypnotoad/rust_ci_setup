@@ -47,7 +47,7 @@ task_preflight_check:
   # before_cache_script: rm -rf $CARGO_HOME/registry/index
 
 task_ubuntu_22_04_x64_beta_debug:
-  depends_on: preflight_check
+  # depends_on: preflight_check
   ELK_RUST_TOOLCHAIN: beta
   ELK_BUILD_TYPE:  # empty because there is no '--debug' flag
   container:
