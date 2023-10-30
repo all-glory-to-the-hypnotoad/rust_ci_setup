@@ -14,19 +14,22 @@
 
 cpu_and_memory_config_for_builds_template: &CPU_AND_MEMORY_CONFIG_FOR_BUILDS_TEMPLATE
   cpu: 4
-  memory: 8GB
+  memory: 4GB
+
+common_build_and_test_template: &COMMON_BUILD_AND_TEST_TEMPLATE
+  set_toolchain_script: rustup default $ELK_RUST_TOOLCHAIN
+  doc_script: RUSTDOCFLAGS="-D warnings" cargo doc
+  build_script: cargo build $ELK_BUILD_TYPE --workspace --all --examples
+  test_script: cargo test $ELK_BUILD_TYPE --workspace --all
 
 #
 # Basic tests
 #
 
 task:
-  name: Ubuntu 22.04 x64 # $RUST_TOOLCHAIN
-  matrix:
-    - RUST_TOOLCHAIN: stable
-    - RUST_TOOLCHAIN: beta
-    - RUST_TOOLCHAIN: nightly
-  allow_failures: $RUST_TOOLCHAIN == "nightly"
+  name: Ubuntu 22.04 [x64] [stable] [debug]
+  ELK_RUST_TOOLCHAIN: stable
+  ELK_BUILD_TYPE: # empty because there is no '--debug' flag
   container:
     dockerfile: internal/docker/ubuntu-22.04
     << : *CPU_AND_MEMORY_CONFIG_FOR_BUILDS_TEMPLATE
@@ -38,10 +41,38 @@ task:
   #  fingerprint_script:
   #    - rustc --version
   #    - cat Cargo.lock
-  build_script: 
-    - echo "$RUST_TOOLCHAIN"
-    - rustup default $RUST_TOOLCHAIN
-    - cargo build --all
-  test_script: cargo test --all
+  << : &COMMON_BUILD_AND_TEST_TEMPLATE
     #before_cache_script: rm -rf $CARGO_HOME/registry/index
+
+task:
+  name: Ubuntu 22.04 [x64] [beta] [debug]
+  depends_on: Ubuntu 22.04 [x64] [stable] [debug]
+  ELK_RUST_TOOLCHAIN: beta
+  ELK_BUILD_TYPE: # empty because there is no '--debug' flag
+  allow_failures: true
+  container:
+    dockerfile: internal/docker/ubuntu-22.04
+    << : *CPU_AND_MEMORY_CONFIG_FOR_BUILDS_TEMPLATE
+  << : &COMMON_BUILD_AND_TEST_TEMPLATE
+
+task:
+  name: Ubuntu 22.04 [x64] [nightly] [debug]
+  depends_on: Ubuntu 22.04 [x64] [beta] [debug]
+  ELK_RUST_TOOLCHAIN: nightly
+  ELK_BUILD_TYPE: # empty because there is no '--debug' flag
+  allow_failures: true
+  container:
+    dockerfile: internal/docker/ubuntu-22.04
+    << : *CPU_AND_MEMORY_CONFIG_FOR_BUILDS_TEMPLATE
+  << : &COMMON_BUILD_AND_TEST_TEMPLATE
+
+task:
+  name: Aarch Linux [aarch64] [stable] [release]
+  depends_on: Ubuntu 22.04 [x64] [stable] [release]
+  ELK_RUST_TOOLCHAIN: stable
+  ELK_BUILD_TYPE: --release
+  arm_container:
+    dockerfile: internal/docker/archlinux-base-devel
+    << : *CPU_AND_MEMORY_CONFIG_FOR_BUILDS_TEMPLATE
+  << : &COMMON_BUILD_AND_TEST_TEMPLATE
 
