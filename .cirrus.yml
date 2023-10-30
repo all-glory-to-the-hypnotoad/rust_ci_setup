@@ -1,4 +1,11 @@
 #
+# Note
+#
+# Cirrus CI has a concurrency limit of 24 CPU cores for open source projects.
+# This means we should not have more than 12 pipelines with more than 2 CPUs in each pipeline running parallel
+#
+
+#
 # templates
 #
 
