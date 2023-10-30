@@ -29,7 +29,7 @@ ELK_COMMON_BUILD_AND_TEST_TEMPLATE: &ELK_COMMON_BUILD_AND_TEST_TEMPLATE
 # Ubuntu x86
 #
 
-task_preflight_check:
+preflight_check_task:
   ELK_RUST_TOOLCHAIN: stable
   ELK_BUILD_TYPE:  # empty because there is no '--debug' flag
   container:
@@ -46,7 +46,7 @@ task_preflight_check:
   <<: *ELK_COMMON_BUILD_AND_TEST_TEMPLATE
   # before_cache_script: rm -rf $CARGO_HOME/registry/index
 
-task_ubuntu_22_04_x64_beta_debug:
+ubuntu_22_04_x64_beta_debug_task:
   # depends_on: preflight_check
   ELK_RUST_TOOLCHAIN: beta
   ELK_BUILD_TYPE:  # empty because there is no '--debug' flag
