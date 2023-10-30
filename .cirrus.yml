@@ -74,7 +74,7 @@ ubuntu_22_04_aarch64_stable_release_task:
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
   <<: *ELK_COMMON_BUILD_AND_TEST
 
-archlinux_x64_stable_release:
+archlinux_x64_stable_release_task:
   depends_on: preflight_check
   ELK_RUST_TOOLCHAIN: stable
   ELK_BUILD_TYPE: --release
