@@ -46,7 +46,7 @@ task_preflight_check:
   <<: &ELK_COMMON_BUILD_AND_TEST_TEMPLATE
   # before_cache_script: rm -rf $CARGO_HOME/registry/index
 
-task Ubuntu 22.04 [x64] [beta] [debug]:
+task_ubuntu_22_04_x64_beta_debug:
   depends_on: preflight_check
   ELK_RUST_TOOLCHAIN: beta
   ELK_BUILD_TYPE:  # empty because there is no '--debug' flag
@@ -57,7 +57,7 @@ task Ubuntu 22.04 [x64] [beta] [debug]:
   <<: *ELK_COMMON_BUILD_AND_TEST_TEMPLATE
 
 task Ubuntu 22.04 [x64] [nightly] [debug]:
-  depends_on: Ubuntu 22.04 [x64] [beta] [debug]
+  depends_on: ubuntu_22_04_x64_beta_debug
   ELK_RUST_TOOLCHAIN: nightly
   ELK_BUILD_TYPE:  # empty because there is no '--debug' flag
   allow_failures: true
