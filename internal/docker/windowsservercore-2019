@@ -1,0 +1,4 @@
+# syntax=docker/dockerfile:1
+
+# Select base image
+FROM cirrusci/windowsservercore:2019-2022.06.23
