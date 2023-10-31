@@ -22,34 +22,32 @@
 # Templates
 #
 
-# Container
+# Constants
+
+elk_task_timeout_template: &ELK_TASK_TIMEOUT
+  timeout_in: 10m # This needs to be reasonable large in order not to run in a timeout in the docker image re-builds
 
 elk_common_cpu_and_memory_config_for_build_and_test_template: &ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
   cpu: 2
   memory: 4GB
 
-elk_docker_build_timeout_template: &ELK_DOCKER_BUILD_TIMEOUT
-  timeout_in: 20m
+# Container
 
 elk_container_ubuntu_22_04_x64_template: &ELK_CONTAINER_UBUNTU_22_04_X64
+  <<: *ELK_TASK_TIMEOUT
   container:
-    <<: *ELK_DOCKER_BUILD_TIMEOUT
     dockerfile: internal/docker/ubuntu-22.04
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
 
 elk_container_windows_server_2019_x64_template: &ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+  <<: *ELK_TASK_TIMEOUT
   windows_container:
-    <<: *ELK_DOCKER_BUILD_TIMEOUT
     image: cirrusci/windowsservercore:2019-2022.06.23
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
 
 # Build and Teset
 
-elk_build_and_test_timeout_template: &ELK_BUILD_AND_TEST_TIMEOUT
-  timeout_in: 2m
-
 elk_common_build_and_test_debug_template: &ELK_COMMON_BUILD_AND_TEST_DEBUG
-  <<: *ELK_BUILD_AND_TEST_TIMEOUT
   env:
     RUSTDOCFLAGS: -D warnings
   build_script: cargo build --workspace --all --examples
@@ -57,7 +55,6 @@ elk_common_build_and_test_debug_template: &ELK_COMMON_BUILD_AND_TEST_DEBUG
   test_script: cargo test --workspace --all
 
 elk_common_build_and_test_release_template: &ELK_COMMON_BUILD_AND_TEST_RELEASE
-  <<: *ELK_BUILD_AND_TEST_TIMEOUT
   env:
     RUSTDOCFLAGS: -D warnings
   build_script: cargo build --release --workspace --all --examples
@@ -65,7 +62,6 @@ elk_common_build_and_test_release_template: &ELK_COMMON_BUILD_AND_TEST_RELEASE
   test_script: cargo test --release --workspace --all
 
 elk_windows_build_and_test_debug_template: &ELK_WINDOWS_BUILD_AND_TEST_DEBUG
-  <<: *ELK_BUILD_AND_TEST_TIMEOUT
   env:
     RUSTDOCFLAGS: -D warnings
   build_script: cargo build --workspace --all --benches
@@ -73,7 +69,6 @@ elk_windows_build_and_test_debug_template: &ELK_WINDOWS_BUILD_AND_TEST_DEBUG
   test_script: cargo test --workspace --all
 
 elk_windows_build_and_test_release_template: &ELK_WINDOWS_BUILD_AND_TEST_RELEASE
-  <<: *ELK_BUILD_AND_TEST_TIMEOUT
   env:
     RUSTDOCFLAGS: -D warnings
   build_script: cargo build --release --workspace --all --benches
