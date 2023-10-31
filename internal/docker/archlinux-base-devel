@@ -3,6 +3,9 @@
 # Select base image
 FROM archlinux:base-devel
 
+# Add '/root/.cargo/bin' to path; this is required sind '.cargo/env' cannot easily be sourced in the docker image
+ENV PATH="/root/.cargo/bin:$PATH"
+
 # Minimize the number of layers (RUN, COPY and ADD create layers)
 # https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#minimize-the-number-of-layers
 RUN echo "#### Installing dependencies" \
@@ -12,7 +15,6 @@ RUN echo "#### Installing dependencies" \
   && pacman -Scc --noconfirm \ 
   && echo "#### Install minimal Rust toolchain" \
   && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path \
-  && export PATH="$HOME/.cargo/bin:$PATH" \
   && echo "#### Adding beta and nightly toolchain" \
   && rustup toolchain add \
        beta \
@@ -32,5 +34,4 @@ RUN echo "#### Installing dependencies" \
   && groupadd testgroup1 \
   && groupadd testgroup2
 
-# Set environment variables
-ENV PATH="/root/.cargo/bin:$PATH"
+# Set additional environment variables, e.g. 'ENV FOO=BAR'

@@ -22,9 +22,23 @@
 # Templates
 #
 
+# Container
+
 elk_common_cpu_and_memory_config_for_build_and_test_template: &ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
   cpu: 2
   memory: 4GB
+
+elk_container_ubuntu_22_04_x64_template: &ELK_CONTAINER_UBUNTU_22_04_X64
+  container:
+    dockerfile: internal/docker/ubuntu-22.04
+    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+
+elk_container_windows_server_2019_x64_template: &ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+  windows_container:
+    image: cirrusci/windowsservercore:2019-2022.06.23
+    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+
+# Build and Teset
 
 elk_common_build_and_test_debug_template: &ELK_COMMON_BUILD_AND_TEST_DEBUG
   env:
@@ -58,22 +72,12 @@ elk_windows_build_and_test_release_template: &ELK_WINDOWS_BUILD_AND_TEST_RELEASE
   doc_script: cargo doc --release
   test_script: cargo test --release --workspace --all
 
-elk_container_ubuntu_22_04_template: &ELK_CONTAINER_UBUNTU_22_04
-  container:
-    dockerfile: internal/docker/ubuntu-22.04
-    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
-
-elk_container_windows_server_2019_template: &ELK_CONTAINER_WINDOWS_SERVER_2019
-  windows_container:
-    image: cirrusci/windowsservercore:2019-2022.06.23
-    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
-
 #
 # Ubuntu x86
 #
 
 preflight_check_task:
-  <<: *ELK_CONTAINER_UBUNTU_22_04
+  <<: *ELK_CONTAINER_UBUNTU_22_04_X64
   # registry_cache:
   #   folder: $CARGO_HOME/registry
   #   fingerprint_script: cat Cargo.lock
@@ -88,21 +92,21 @@ preflight_check_task:
 
 ubuntu_nighlty_task:
   depends_on: preflight_check
-  <<: *ELK_CONTAINER_UBUNTU_22_04
+  <<: *ELK_CONTAINER_UBUNTU_22_04_X64
   set_toolchain_script: rustup default nightly
   <<: *ELK_COMMON_BUILD_AND_TEST_RELEASE
 
 
-windows_server_10_x64_stable_debug_task:
+windows_server_2019_x64_stable_debug_task:
   depends_on: preflight_check
-  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019
+  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
   install_dependencies_script:
     - choco install -y rust
   <<: *ELK_WINDOWS_BUILD_AND_TEST_DEBUG
 
-windows_server_10_x64_stable_release_task:
-  depends_on: windows_server_10_x64_stable_debug
-  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019
+windows_server_2019_x64_stable_release_task:
+  depends_on: windows_server_2019_x64_stable_debug
+  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
   install_dependencies_script:
     - choco install -y rust
   <<: *ELK_WINDOWS_BUILD_AND_TEST_RELEASE
