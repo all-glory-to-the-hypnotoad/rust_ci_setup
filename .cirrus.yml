@@ -27,6 +27,12 @@ elk_common_build_and_test_template: &ELK_COMMON_BUILD_AND_TEST
   doc_script: RUSTDOCFLAGS="-D warnings" cargo doc
   test_script: cargo test $ELK_BUILD_TYPE --workspace --all
 
+elk_windows_build_and_test_template: &ELK_WINDOWS_BUILD_AND_TEST
+  timeout_in: 20m
+  build_script: cargo build $ELK_BUILD_TYPE --workspace --all --examples
+  doc_script: RUSTDOCFLAGS="-D warnings" cargo doc
+  test_script: cargo test $ELK_BUILD_TYPE --workspace --all
+
 #
 # Ubuntu x86
 #
@@ -58,5 +64,5 @@ windows_server_10_x64_stable_debug_task:
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
   install_dependencies_script:
     - choco install -y rust
-  <<: *ELK_COMMON_BUILD_AND_TEST
+  <<: *ELK_WINDOWS_BUILD_AND_TEST
 
