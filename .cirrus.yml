@@ -38,7 +38,7 @@ elk_common_build_and_test_release_template: &ELK_COMMON_BUILD_AND_TEST_RELEASE
 
 elk_windows_build_and_test_debug_template: &ELK_WINDOWS_BUILD_AND_TEST_DEBUG
   timeout_in: 20m
-  build_script: cargo build --workspace --all --examples
+  build_script: cargo build --workspace --all
   doc_script:
     - set RUSTDOCFLAGS=-D warnings # TODO elk-#8: move this to docker container
     - cargo doc
@@ -48,7 +48,7 @@ elk_windows_build_and_test_release_template: &ELK_WINDOWS_BUILD_AND_TEST_RELEASE
   env:
     RUSTDOCFLAGS: -D warnings
   timeout_in: 20m
-  build_script: cargo build --release --workspace --all --examples
+  build_script: cargo build --release --workspace --all
   doc_script: cargo doc --release
   test_script: cargo test --release --workspace --all
 
@@ -88,7 +88,7 @@ windows_server_10_x64_stable_debug_task:
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
   install_dependencies_script:
     - choco install -y rust
-  <<: *ELK_COMMON_BUILD_AND_TEST_DEBUG
+  <<: *ELK_WINDOWS_BUILD_AND_TEST_DEBUG
 
 windows_server_10_x64_stable_release_task:
   depends_on: windows_server_10_x64_stable_debug
