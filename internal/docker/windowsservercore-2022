@@ -1,15 +1,9 @@
 # syntax=docker/dockerfile:1
 
 # Select base image
-FROM mcr.microsoft.com/windows/servercore:ltsc2022-amd64
-
-ENV PATH=C:\cargo\bin:$PATH
+FROM cirrusci/windowsservercore:visualstudio2022-2022.06.23
 
 SHELL ["powershell.exe", "-NoLogo", "-NoProfile", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
-RUN Invoke-WebRequest -Uri https://static.rust-lang.org/rustup/dist/i686-pc-windows-msvc/rustup-init.exe -OutFile C:\rustup-init.exe; \
-    Start-Process -Wait -FilePath C:\rustup-init.exe -ArgumentList 'install --default-toolchain stable -y'; \
-    Remove-Item C:\rustup-init.exe; \
-    rustup --version; \
-    cargo --version; \
-    rustc --version;
+RUN choco install -y llvm; \
+    choco install -y rust

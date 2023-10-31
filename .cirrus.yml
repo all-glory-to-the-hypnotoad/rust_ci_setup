@@ -103,13 +103,9 @@ ubuntu_nighlty_task:
 windows_server_2022_x64_stable_debug_task:
   depends_on: preflight_check
   <<: *ELK_CONTAINER_WINDOWS_SERVER_2022_X64
-  install_dependencies_script:
-    - choco install -y rust
   <<: *ELK_WINDOWS_BUILD_AND_TEST_DEBUG
 
 windows_server_2022_x64_stable_release_task:
   depends_on: windows_server_2022_x64_stable_debug
   <<: *ELK_CONTAINER_WINDOWS_SERVER_2022_X64
-  install_dependencies_script:
-    - choco install -y rust
   <<: *ELK_WINDOWS_BUILD_AND_TEST_RELEASE
