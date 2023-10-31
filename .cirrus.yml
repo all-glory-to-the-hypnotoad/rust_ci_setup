@@ -10,20 +10,26 @@
 # - https://cirrus-ci.org/guide/writing-tasks/
 #
 
+# TODO:
+# - https://github.com/marketplace/actions/create-pull-request
+# - https://peterevans.dev/posts/github-actions-how-to-create-pull-requests-automatically/
+#
+# - https://forge.rust-lang.org/infra/other-installation-methods.html#rustup
+
+---
+
 #
 # Templates
 #
 
----
-
 elk_common_cpu_and_memory_config_for_build_and_test_template: &ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
-  cpu: 4
+  cpu: 2
   memory: 4GB
 
 elk_common_build_and_test_debug_template: &ELK_COMMON_BUILD_AND_TEST_DEBUG
   env:
     RUSTDOCFLAGS: -D warnings
-  timeout_in: 20m
+  timeout_in: 2m
   build_script: cargo build --workspace --all --examples
   doc_script: cargo doc
   test_script: cargo test --workspace --all
@@ -31,35 +37,44 @@ elk_common_build_and_test_debug_template: &ELK_COMMON_BUILD_AND_TEST_DEBUG
 elk_common_build_and_test_release_template: &ELK_COMMON_BUILD_AND_TEST_RELEASE
   env:
     RUSTDOCFLAGS: -D warnings
-  timeout_in: 20m
+  timeout_in: 2m
   build_script: cargo build --release --workspace --all --examples
   doc_script: cargo doc --release
   test_script: cargo test --release --workspace --all
 
 elk_windows_build_and_test_debug_template: &ELK_WINDOWS_BUILD_AND_TEST_DEBUG
-  timeout_in: 20m
-  build_script: cargo build --workspace --all
-  doc_script:
-    - set RUSTDOCFLAGS=-D warnings # TODO elk-#8: move this to docker container
-    - cargo doc
+  env:
+    RUSTDOCFLAGS: -D warnings
+  timeout_in: 2m
+  build_script: cargo build --workspace --all --benches
+  doc_script: cargo doc
   test_script: cargo test --workspace --all
 
 elk_windows_build_and_test_release_template: &ELK_WINDOWS_BUILD_AND_TEST_RELEASE
   env:
     RUSTDOCFLAGS: -D warnings
-  timeout_in: 20m
-  build_script: cargo build --release --workspace --all
+  timeout_in: 2m
+  build_script: cargo build --release --workspace --all --benches
   doc_script: cargo doc --release
   test_script: cargo test --release --workspace --all
+
+elk_container_ubuntu_22_04_template: &ELK_CONTAINER_UBUNTU_22_04
+  container:
+    dockerfile: internal/docker/ubuntu-22.04
+    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+
+elk_container_windows_server_2019_template: &ELK_CONTAINER_WINDOWS_SERVER_2019
+  windows_container:
+    image: cirrusci/windowsservercore:2019-2022.06.23
+    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+---
 
 #
 # Ubuntu x86
 #
 
 preflight_check_task:
-  container:
-    dockerfile: internal/docker/ubuntu-22.04
-    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+  <<: *ELK_CONTAINER_UBUNTU_22_04
   # registry_cache:
   #   folder: $CARGO_HOME/registry
   #   fingerprint_script: cat Cargo.lock
@@ -74,28 +89,21 @@ preflight_check_task:
 
 ubuntu_nighlty_task:
   depends_on: preflight_check
-  container:
-    dockerfile: internal/docker/ubuntu-22.04
-    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+  <<: *ELK_CONTAINER_UBUNTU_22_04
   set_toolchain_script: rustup default nightly
   <<: *ELK_COMMON_BUILD_AND_TEST_RELEASE
 
 
 windows_server_10_x64_stable_debug_task:
   depends_on: preflight_check
-  windows_container:
-    image: cirrusci/windowsservercore:2019-2022.06.23
-    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019
   install_dependencies_script:
     - choco install -y rust
   <<: *ELK_WINDOWS_BUILD_AND_TEST_DEBUG
 
 windows_server_10_x64_stable_release_task:
   depends_on: windows_server_10_x64_stable_debug
-  windows_container:
-    image: cirrusci/windowsservercore:2019-2022.06.23
-    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019
   install_dependencies_script:
     - choco install -y rust
   <<: *ELK_WINDOWS_BUILD_AND_TEST_RELEASE
-
