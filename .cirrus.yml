@@ -49,7 +49,7 @@ preflight_check_task:
   # before_cache_script: rm -rf $CARGO_HOME/registry/index
 
 
-windows_server_10_x64_stable_debug:
+windows_server_10_x64_stable_debug_task:
   depends_on: preflight_check
   ELK_RUST_TOOLCHAIN: stable
   ELK_BUILD_TYPE:  # empty because there is no '--debug' flag
