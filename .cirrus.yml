@@ -64,15 +64,30 @@ preflight_check_task:
   <<: *ELK_COMMON_BUILD_AND_TEST_DEBUG
   # before_cache_script: rm -rf $CARGO_HOME/registry/index
 
+ubuntu_nighlty_task:
+  depends_on: preflight_check
+  container:
+    dockerfile: internal/docker/ubuntu-22.04
+    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+  set_toolchain_script: rustup default nightly
+  <<: *ELK_COMMON_BUILD_AND_TEST_RELEASE
+
 
 windows_server_10_x64_stable_debug_task:
   depends_on: preflight_check
-  ELK_RUST_TOOLCHAIN: stable
-  ELK_BUILD_TYPE:  # empty because there is no '--debug' flag
   windows_container:
     image: cirrusci/windowsservercore:2019-2022.06.23
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
   install_dependencies_script:
     - choco install -y rust
-  <<: *ELK_WINDOWS_BUILD_AND_TEST_DEBUG
+  <<: *ELK_COMMON_BUILD_AND_TEST_DEBUG
+
+windows_server_10_x64_stable_release_task:
+  depends_on: windows_server_10_x64_stable_debug
+  windows_container:
+    image: cirrusci/windowsservercore:2019-2022.06.23
+    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+  install_dependencies_script:
+    - choco install -y rust
+  <<: *ELK_WINDOWS_BUILD_AND_TEST_RELEASE
 
