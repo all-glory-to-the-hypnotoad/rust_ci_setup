@@ -20,26 +20,35 @@ elk_common_cpu_and_memory_config_for_build_and_test_template: &ELK_COMMON_CPU_AN
   cpu: 4
   memory: 4GB
 
-elk_common_build_and_test_template: &ELK_COMMON_BUILD_AND_TEST
+elk_common_build_and_test_debug_template: &ELK_COMMON_BUILD_AND_TEST_DEBUG
   timeout_in: 20m
-  set_toolchain_script: rustup default $ELK_RUST_TOOLCHAIN
-  build_script: cargo build ${ELK_BUILD_TYPE} --workspace --all --examples
+  build_script: cargo build --workspace --all --examples
   doc_script: RUSTDOCFLAGS="-D warnings" cargo doc
-  test_script: cargo test ${ELK_BUILD_TYPE} --workspace --all
+  test_script: cargo test --workspace --all
 
-elk_windows_build_and_test_template: &ELK_WINDOWS_BUILD_AND_TEST
+elk_common_build_and_test_release_template: &ELK_COMMON_BUILD_AND_TEST_RELEASE
   timeout_in: 20m
-  build_script: cargo build ${ELK_BUILD_TYPE} --workspace --all --examples
+  build_script: cargo build --release --workspace --all --examples
+  doc_script: RUSTDOCFLAGS="-D warnings" cargo doc --release
+  test_script: cargo test --release --workspace --all
+
+elk_windows_build_and_test_debug_template: &ELK_WINDOWS_BUILD_AND_TEST_DEBUG
+  timeout_in: 20m
+  build_script: cargo build --workspace --all --examples
   doc_script: RUSTDOCFLAGS="-D warnings" cargo doc
-  test_script: cargo test ${ELK_BUILD_TYPE} --workspace --all
+  test_script: cargo test --workspace --all
+
+elk_windows_build_and_test_release_template: &ELK_WINDOWS_BUILD_AND_TEST_RELEASE
+  timeout_in: 20m
+  build_script: cargo build --release --workspace --all --examples
+  doc_script: RUSTDOCFLAGS="-D warnings" cargo doc --release
+  test_script: cargo test --release --workspace --all
 
 #
 # Ubuntu x86
 #
 
 preflight_check_task:
-  ELK_RUST_TOOLCHAIN: beta
-  ELK_BUILD_TYPE: --release
   container:
     dockerfile: internal/docker/ubuntu-22.04
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
@@ -51,7 +60,8 @@ preflight_check_task:
   #   fingerprint_script:
   #     - rustc --version
   #     - cat Cargo.lock
-  <<: *ELK_COMMON_BUILD_AND_TEST
+  set_toolchain_script: rustup default beta
+  <<: *ELK_COMMON_BUILD_AND_TEST_DEBUG
   # before_cache_script: rm -rf $CARGO_HOME/registry/index
 
 
@@ -64,5 +74,5 @@ windows_server_10_x64_stable_debug_task:
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
   install_dependencies_script:
     - choco install -y rust
-  <<: *ELK_WINDOWS_BUILD_AND_TEST
+  <<: *ELK_WINDOWS_BUILD_AND_TEST_DEBUG
 
