@@ -49,12 +49,14 @@ preflight_check_task:
   # before_cache_script: rm -rf $CARGO_HOME/registry/index
 
 
-windows_server_x64_stable_debug:
+windows_server_10_x64_stable_debug:
   depends_on: preflight_check
   ELK_RUST_TOOLCHAIN: stable
   ELK_BUILD_TYPE:  # empty because there is no '--debug' flag
   windows_container:
-    dockerfile: internal/docker/windowsservercore
+    image: cirrusci/windowsservercore:2019-2022.06.23
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+  install_dependencies_script:
+    - choco install rust
   <<: *ELK_COMMON_BUILD_AND_TEST
 
