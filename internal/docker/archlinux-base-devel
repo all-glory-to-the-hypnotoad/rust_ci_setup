@@ -34,4 +34,3 @@ RUN echo "#### Installing dependencies" \
 
 # Set environment variables
 ENV PATH="/root/.cargo/bin:$PATH"
-

@@ -5,8 +5,9 @@
 # This means we should not have more than 12 pipelines with more than 2 CPUs
 # in each pipeline running parallel
 #
-# https://cirrus-ci.org/examples/
-# https://cirrus-ci.org/guide/writing-tasks/
+# Documentation:
+# - https://cirrus-ci.org/examples/
+# - https://cirrus-ci.org/guide/writing-tasks/
 #
 
 #
@@ -20,6 +21,7 @@ elk_common_cpu_and_memory_config_for_build_and_test_template: &ELK_COMMON_CPU_AN
   memory: 4GB
 
 elk_common_build_and_test_template: &ELK_COMMON_BUILD_AND_TEST
+  timeout_in: 20m
   set_toolchain_script: rustup default $ELK_RUST_TOOLCHAIN
   doc_script: RUSTDOCFLAGS="-D warnings" cargo doc
   build_script: cargo build $ELK_BUILD_TYPE --workspace --all --examples
