@@ -38,8 +38,8 @@ elk_windows_build_and_test_template: &ELK_WINDOWS_BUILD_AND_TEST
 #
 
 preflight_check_task:
-  ELK_RUST_TOOLCHAIN: stable
-  ELK_BUILD_TYPE:  # empty because there is no '--debug' flag
+  ELK_RUST_TOOLCHAIN: beta
+  ELK_BUILD_TYPE: --release
   container:
     dockerfile: internal/docker/ubuntu-22.04
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
