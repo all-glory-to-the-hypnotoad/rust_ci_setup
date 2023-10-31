@@ -42,7 +42,7 @@ elk_container_ubuntu_22_04_x64_template: &ELK_CONTAINER_UBUNTU_22_04_X64
 elk_container_windows_server_2019_x64_template: &ELK_CONTAINER_WINDOWS_SERVER_2019_X64
   <<: *ELK_TASK_TIMEOUT
   windows_container:
-    docker: internal/docker/windowsservercore-2019
+    dockerfile: internal/docker/windowsservercore-2019
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
 
 # Build and Teset
