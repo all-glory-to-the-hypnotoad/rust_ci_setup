@@ -39,10 +39,10 @@ elk_container_ubuntu_22_04_x64_template: &ELK_CONTAINER_UBUNTU_22_04_X64
     dockerfile: internal/docker/ubuntu-22.04
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
 
-elk_container_windows_server_2019_x64_template: &ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+elk_container_windows_server_2022_x64_template: &ELK_CONTAINER_WINDOWS_SERVER_2022_X64
   <<: *ELK_TASK_TIMEOUT
   windows_container:
-    dockerfile: internal/docker/windowsservercore-2019
+    dockerfile: internal/docker/windowsservercore-2022
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
 
 # Build and Teset
@@ -100,16 +100,16 @@ ubuntu_nighlty_task:
   <<: *ELK_COMMON_BUILD_AND_TEST_RELEASE
 
 
-windows_server_2019_x64_stable_debug_task:
+windows_server_2022_x64_stable_debug_task:
   depends_on: preflight_check
-  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+  <<: *ELK_CONTAINER_WINDOWS_SERVER_2022_X64
   install_dependencies_script:
     - choco install -y rust
   <<: *ELK_WINDOWS_BUILD_AND_TEST_DEBUG
 
-windows_server_2019_x64_stable_release_task:
-  depends_on: windows_server_2019_x64_stable_debug
-  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+windows_server_2022_x64_stable_release_task:
+  depends_on: windows_server_2022_x64_stable_debug
+  <<: *ELK_CONTAINER_WINDOWS_SERVER_2022_X64
   install_dependencies_script:
     - choco install -y rust
   <<: *ELK_WINDOWS_BUILD_AND_TEST_RELEASE
