@@ -32,14 +32,14 @@ elk_docker_build_timeout_template: &ELK_DOCKER_BUILD_TIMEOUT
   timeout_in: 20m
 
 elk_container_ubuntu_22_04_x64_template: &ELK_CONTAINER_UBUNTU_22_04_X64
-  <<: *ELK_DOCKER_BUILD_TIMEOUT
   container:
+    <<: *ELK_DOCKER_BUILD_TIMEOUT
     dockerfile: internal/docker/ubuntu-22.04
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
 
 elk_container_windows_server_2019_x64_template: &ELK_CONTAINER_WINDOWS_SERVER_2019_X64
-  <<: *ELK_DOCKER_BUILD_TIMEOUT
   windows_container:
+    <<: *ELK_DOCKER_BUILD_TIMEOUT
     image: cirrusci/windowsservercore:2019-2022.06.23
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
 
