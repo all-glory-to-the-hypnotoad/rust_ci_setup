@@ -67,7 +67,6 @@ elk_container_windows_server_2019_template: &ELK_CONTAINER_WINDOWS_SERVER_2019
   windows_container:
     image: cirrusci/windowsservercore:2019-2022.06.23
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
----
 
 #
 # Ubuntu x86
