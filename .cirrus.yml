@@ -57,6 +57,6 @@ windows_server_10_x64_stable_debug_task:
     image: cirrusci/windowsservercore:2019-2022.06.23
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
   install_dependencies_script:
-    - choco install rust
+    - choco install -y rust
   <<: *ELK_COMMON_BUILD_AND_TEST
 
