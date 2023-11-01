@@ -104,6 +104,10 @@ windows_server_2019_x64_stable_debug_task:
   depends_on: preflight_check
   <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
   dummy_script:
+    - ls C:\cargo
+    - ls C:\cargo\bin
+    - ls C:\rustup
+    - ls C:\rustup\bin
     - C:\cargo\bin\cargo --version
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
