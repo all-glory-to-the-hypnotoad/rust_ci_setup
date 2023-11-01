@@ -109,11 +109,11 @@ windows_server_2019_x64_stable_debug_task:
     - ls C:\rustup
     - C:\cargo\bin\rustup default stable
     - C:\cargo\bin\cargo --version
-    - PATH="C:\cargo\bin;C:\cargo\rustup;%PATH%"
-    - cargo --version
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
     - C:\cargo\bin\cargo build --workspace --all --examples
+    - echo $env:PATH
+    - cargo --version
   <<: *ELK_WINDOWS_BUILD_AND_TEST_DEBUG
 
 windows_server_2019_x64_stable_release_task:
