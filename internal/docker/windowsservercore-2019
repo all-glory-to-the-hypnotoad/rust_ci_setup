@@ -7,6 +7,7 @@ ENV RUSTUP_HOME=C:\rustup \
     CARGO_HOME=C:\cargo
 
 SHELL ["powershell.exe", "-NoLogo", "-NoProfile", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
+# SHELL ["powershell.exe", "-NoLogo", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
 #RUN choco install -y llvm; \
 #    Remove-Item C:\ProgramData\chocolatey\logs\* -Force -Recurse ; \
@@ -16,5 +17,8 @@ SHELL ["powershell.exe", "-NoLogo", "-NoProfile", "-Command", "$ErrorActionPrefe
 RUN Invoke-WebRequest -Uri https://static.rust-lang.org/rustup/dist/i686-pc-windows-msvc/rustup-init.exe -OutFile C:\rustup-init.exe;
 RUN Start-Process -Wait -FilePath C:\rustup-init.exe -ArgumentList 'install --default-toolchain stable -y';
 RUN Remove-Item C:\rustup-init.exe;
+RUN ls
+RUN ls ${en:CARGO_HOME}
 RUN rustup --version;
 RUN cargo --version;
+
