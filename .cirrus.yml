@@ -105,11 +105,11 @@ windows_server_2019_x64_stable_debug_task:
   <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
   dummy_script:
     - echo $env:PATH
-    - cargo --version
-    - rustup default stable
+    - C:\cargo\rustup default 1.73.0
+    - C:\cargo\cargo --version
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
-    - cargo build --workspace --all --examples
+    - C:\cargo\cargo build --workspace --all --examples
   <<: *ELK_WINDOWS_BUILD_AND_TEST_DEBUG
 
 windows_server_2019_x64_stable_release_task:
