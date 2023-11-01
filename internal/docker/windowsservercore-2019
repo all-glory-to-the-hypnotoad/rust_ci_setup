@@ -31,10 +31,9 @@ RUN [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::Sec
     $newPath = ('{0}\bin;{1}' -f ${env:CARGO_HOME}, ${env:PATH}); \
     [Environment]::SetEnvironmentVariable('PATH', $newPath, [EnvironmentVariableTarget]::Machine); \
     [Environment]::SetEnvironmentVariable('PATH', $newPath, [EnvironmentVariableTarget]::Process); \
+    [Environment]::SetEnvironmentVariable('PATH', $newPath, [EnvironmentVariableTarget]::User); \
     C:\rustup-init.exe -y -v --no-modify-path --default-toolchain stable --default-host x86_64-pc-windows-msvc; \
     Remove-Item C:\rustup-init.exe; \
     rustup -V; \
     cargo -V; \
     rustc -V
-
-ENV PATH="C:\cargo\bin;%PATH%"
