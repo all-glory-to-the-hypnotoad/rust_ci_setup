@@ -3,7 +3,7 @@
 # Select base image
 FROM cirrusci/windowsservercore:visualstudio2022-2022.06.23
 
-ENV RUSTUP_HOME=C:\rustup `
+ENV RUSTUP_HOME=C:\rustup \
     CARGO_HOME=C:\cargo
 
 SHELL ["powershell.exe", "-NoLogo", "-NoProfile", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
