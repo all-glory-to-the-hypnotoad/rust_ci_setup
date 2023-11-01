@@ -3,12 +3,16 @@
 # Select base image
 FROM cirrusci/windowsservercore:visualstudio2022-2022.06.23
 
+ENV RUSTUP_HOME=C:\rustup `
+    CARGO_HOME=C:\cargo
+
 SHELL ["powershell.exe", "-NoLogo", "-NoProfile", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
 RUN choco install -y llvm; \
     Remove-Item C:\ProgramData\chocolatey\logs\* -Force -Recurse ; \
     Remove-Item $Env:localappdata\Nuget\Cache\*nupkg ; \
     Remove-Item $Env:temp\* -Force -Recurse
+
 
 RUN Invoke-WebRequest -Uri https://static.rust-lang.org/rustup/dist/i686-pc-windows-msvc/rustup-init.exe -OutFile C:\rustup-init.exe; \
     Start-Process -Wait -FilePath C:\rustup-init.exe -ArgumentList 'install --default-toolchain stable -y'; \
