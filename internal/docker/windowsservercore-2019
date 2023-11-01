@@ -3,7 +3,7 @@
 # Select base image
 FROM cirrusci/windowsservercore:visualstudio2022-2022.06.23
 
-ENV PATH="C:\cargo\bin;C:\cargo\rustup;%PATH%"
+ENV PATH="C:\cargo\bin;%PATH%"
 
 ENV RUSTUP_HOME=C:\rustup \
     CARGO_HOME=C:\cargo
@@ -28,10 +28,10 @@ SHELL ["powershell.exe", "-NoLogo", "-NoProfile", "-Command", "$ErrorActionPrefe
 RUN [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12; \
     $url = 'https://static.rust-lang.org/rustup/dist/x86_64-pc-windows-msvc/rustup-init.exe'; \
     Invoke-WebRequest -Uri $url -OutFile C:\rustup-init.exe; \
-#    New-Item ${env:CARGO_HOME}\bin -type directory | Out-Null; \
-#    $newPath = ('{0}\bin;{1}' -f ${env:CARGO_HOME}, ${env:PATH}); \
-#    [Environment]::SetEnvironmentVariable('PATH', $newPath, [EnvironmentVariableTarget]::Machine); \
-#    [Environment]::SetEnvironmentVariable('PATH', $newPath, [EnvironmentVariableTarget]::Process); \
+    New-Item ${env:CARGO_HOME}\bin -type directory | Out-Null; \
+    $newPath = ('{0}\bin;{1}' -f ${env:CARGO_HOME}, ${env:PATH}); \
+    [Environment]::SetEnvironmentVariable('PATH', $newPath, [EnvironmentVariableTarget]::Machine); \
+    [Environment]::SetEnvironmentVariable('PATH', $newPath, [EnvironmentVariableTarget]::Process); \
     C:\rustup-init.exe -y -v --no-modify-path --default-toolchain stable --default-host x86_64-pc-windows-msvc; \
     Remove-Item C:\rustup-init.exe; \
     rustup -V; \
