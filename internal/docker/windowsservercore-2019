@@ -3,7 +3,6 @@
 # Select base image
 FROM cirrusci/windowsservercore:visualstudio2022-2022.06.23
 
-ENV PATH="C:\cargo\bin;%PATH%"
 
 ENV RUSTUP_HOME=C:\rustup \
     CARGO_HOME=C:\cargo
@@ -37,3 +36,5 @@ RUN [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::Sec
     rustup -V; \
     cargo -V; \
     rustc -V
+
+ENV PATH="C:\cargo\bin;%PATH%"
