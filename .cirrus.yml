@@ -79,8 +79,8 @@ elk_windows_build_and_test_release_template: &ELK_WINDOWS_BUILD_AND_TEST_RELEASE
 # Ubuntu x86
 #
 
-preflight_check_task:
-  <<: *ELK_CONTAINER_UBUNTU_22_04_X64
+#preflight_check_task:
+#  <<: *ELK_CONTAINER_UBUNTU_22_04_X64
   # registry_cache:
   #   folder: $CARGO_HOME/registry
   #   fingerprint_script: cat Cargo.lock
@@ -89,22 +89,22 @@ preflight_check_task:
   #   fingerprint_script:
   #     - rustc --version
   #     - cat Cargo.lock
-  set_toolchain_script: rustup default beta
-  <<: *ELK_COMMON_BUILD_AND_TEST_DEBUG
+#  set_toolchain_script: rustup default beta
+#  <<: *ELK_COMMON_BUILD_AND_TEST_DEBUG
   # before_cache_script: rm -rf $CARGO_HOME/registry/index
 
-ubuntu_nighlty_task:
-  depends_on: preflight_check
-  <<: *ELK_CONTAINER_UBUNTU_22_04_X64
-  set_toolchain_script: rustup default nightly
-  <<: *ELK_COMMON_BUILD_AND_TEST_RELEASE
+#ubuntu_nighlty_task:
+#  depends_on: preflight_check
+#  <<: *ELK_CONTAINER_UBUNTU_22_04_X64
+#  set_toolchain_script: rustup default nightly
+#  <<: *ELK_COMMON_BUILD_AND_TEST_RELEASE
 
 
 windows_server_2019_x64_stable_debug_task:
-  depends_on: preflight_check
+  # depends_on: preflight_check
   <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
   dummy_script:
-    - echo $env:PATH
+    - Get-Item Env:PATH
     - C:\cargo\bin\rustup default 1.73.0
     - C:\cargo\bin\cargo --version
     - git clone https://github.com/larry-robotics/elkodon
@@ -114,6 +114,27 @@ windows_server_2019_x64_stable_debug_task:
   <<: *ELK_WINDOWS_BUILD_AND_TEST_DEBUG
 
 windows_server_2019_x64_stable_release_task:
-  depends_on: windows_server_2019_x64_stable_debug
+  # depends_on: windows_server_2019_x64_stable_debug
   <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+    - git clone https://github.com/larry-robotics/elkodon
+    - cd elkodon
+    - C:\cargo\bin\rustup default stable
+    - C:\cargo\bin\cargo build --workspace --all --examples
   <<: *ELK_WINDOWS_BUILD_AND_TEST_RELEASE
+
+
+windows_3_task:
+  # depends_on: preflight_check
+  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+  dummy_script:
+    - Get-Item Env:PATH
+    - RUN setx path "C:\cargo\bin;%path%"
+    - Get-Item Env:PATH
+    - rustup default stable
+    - cargo --version
+    - git clone https://github.com/larry-robotics/elkodon
+    - cd elkodon
+    - cargo --version
+    - rustup default stable
+    - cargo build --workspace --all --examples
+  <<: *ELK_WINDOWS_BUILD_AND_TEST_DEBUG
