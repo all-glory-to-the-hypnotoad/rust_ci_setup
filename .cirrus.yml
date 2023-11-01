@@ -103,6 +103,11 @@ ubuntu_nighlty_task:
 windows_server_2019_x64_stable_debug_task:
   depends_on: preflight_check
   <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+  dummy_script:
+    - C:\cargo\bin\cargo --version
+    - git clone https://github.com/larry-robotics/elkodon
+    - cd elkodon
+    - cargo buiild --workspace --all --examples
   <<: *ELK_WINDOWS_BUILD_AND_TEST_DEBUG
 
 windows_server_2019_x64_stable_release_task:
