@@ -109,6 +109,8 @@ windows_server_2019_x64_stable_debug_task:
     - ls C:\rustup
     - ls C:\rustup\bin
     - C:\cargo\bin\cargo --version
+    - C:\cargo\bin\rustup default stable
+    - cargo --version
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
     - cargo buiild --workspace --all --examples
