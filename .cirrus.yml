@@ -100,44 +100,51 @@ elk_windows_build_and_test_release_template: &ELK_WINDOWS_BUILD_AND_TEST_RELEASE
 #  <<: *ELK_COMMON_BUILD_AND_TEST_RELEASE
 
 
-# windows_server_2019_x64_stable_debug_task:
-#   # depends_on: preflight_check
-#   <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
-#   setup_rust_script: rustup default stable
-#   <<: *ELK_WINDOWS_BUILD_AND_TEST_RELEASE
-#
-# windows_0_task:
-#   # depends_on: preflight_check
-#   <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
-#   <<: *ELK_WINDOWS_BUILD_AND_TEST_RELEASE
-#
-# windows_1_task:
-#   <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
-#   dummy_script:
-#     - git clone https://github.com/larry-robotics/elkodon
-#     - cd elkodon
-#     - rustup default stable
-#     - cargo build --workspace --all --examples
-#   <<: *ELK_WINDOWS_BUILD_AND_TEST_DEBUG
-#
-# windows_2_task:
-#   <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
-#   dummy_script:
-#     - git clone https://github.com/larry-robotics/elkodon
-#     - cd elkodon
-#     - cargo build --workspace --all --examples
-#   <<: *ELK_WINDOWS_BUILD_AND_TEST_RELEASE
-#
-#
-# windows_3_task:
-#   <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
-#   dummy_script:
-#     - setx path "C:\cargo\bin;%path%"
-#     - git clone https://github.com/larry-robotics/elkodon
-#     - cd elkodon
-#     - rustup default stable
-#     - cargo build --workspace --all --examples
-#  <<: *ELK_WINDOWS_BUILD_AND_TEST_DEBUG
+windows_server_2019_x64_stable_debug_task:
+  # depends_on: preflight_check
+  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+  setup_rust_script:
+    - refreshenv
+    - rustup default stable
+  <<: *ELK_WINDOWS_BUILD_AND_TEST_RELEASE
+
+windows_0_task:
+  # depends_on: preflight_check
+  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+  dummy_script:
+    - refreshenv
+  <<: *ELK_WINDOWS_BUILD_AND_TEST_RELEASE
+
+windows_1_task:
+  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+  dummy_script:
+    - refreshenv
+    - git clone https://github.com/larry-robotics/elkodon
+    - cd elkodon
+    - rustup default stable
+    - cargo build --workspace --all --examples
+  <<: *ELK_WINDOWS_BUILD_AND_TEST_DEBUG
+
+windows_2_task:
+  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+  dummy_script:
+    - refreshenv
+    - git clone https://github.com/larry-robotics/elkodon
+    - cd elkodon
+    - cargo build --workspace --all --examples
+  <<: *ELK_WINDOWS_BUILD_AND_TEST_RELEASE
+
+
+windows_3_task:
+  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+  dummy_script:
+    - refreshenv
+    - setx path "C:\cargo\bin;%path%"
+    - git clone https://github.com/larry-robotics/elkodon
+    - cd elkodon
+    - rustup default stable
+    - cargo build --workspace --all --examples
+  <<: *ELK_WINDOWS_BUILD_AND_TEST_DEBUG
 
 windows_4_task:
   <<: *ELK_TASK_TIMEOUT
@@ -147,6 +154,7 @@ windows_4_task:
   install_deps_script:
     - choco install -y llvm
     - choco install -y rust
+    - refreshenv
   dummy_script:
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
