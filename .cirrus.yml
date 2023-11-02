@@ -138,10 +138,11 @@ freebsd_x64_stable_debug_1_task:
   <<: *ELK_CONTAINER_FREEBSD_X64
   env:
     PATH: /cargo/bin:$PATH
+    HOME: /root
   install_dependencies_script:
     - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path
-    - ls -la /
-    - ls -la /cargo
+    - ls -la /root
+    - ls -la /root/.cargo
     - pwd
     - echo $HOME
     - echo $PATH
@@ -153,6 +154,7 @@ freebsd_x64_stable_debug_2_task:
   <<: *ELK_CONTAINER_FREEBSD_X64
   env:
     PATH: /root/cargo/bin:$PATH
+    HOME: /root
   install_dependencies_script:
     - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path
     - ls -laR /root
