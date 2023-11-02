@@ -25,7 +25,7 @@
 # Constants
 
 elk_task_timeout_template: &ELK_TASK_TIMEOUT
-  timeout_in: 10m # This needs to be reasonable large in order not to run in a timeout in the docker image re-builds
+  timeout_in: 15m # This needs to be reasonable large in order not to run in a timeout in the docker image re-builds
 
 elk_common_cpu_and_memory_config_for_build_and_test_template: &ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
   cpu: 2
@@ -100,51 +100,51 @@ elk_windows_build_and_test_release_template: &ELK_WINDOWS_BUILD_AND_TEST_RELEASE
 #  <<: *ELK_COMMON_BUILD_AND_TEST_RELEASE
 
 
-windows_server_2019_x64_stable_debug_task:
-  # depends_on: preflight_check
-  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
-  setup_rust_script:
-    - refreshenv
-    - rustup default stable
-  <<: *ELK_WINDOWS_BUILD_AND_TEST_RELEASE
-
-windows_0_task:
-  # depends_on: preflight_check
-  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
-  dummy_script:
-    - refreshenv
-  <<: *ELK_WINDOWS_BUILD_AND_TEST_RELEASE
-
-windows_1_task:
-  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
-  dummy_script:
-    - refreshenv
-    - git clone https://github.com/larry-robotics/elkodon
-    - cd elkodon
-    - rustup default stable
-    - cargo build --workspace --all --examples
-  <<: *ELK_WINDOWS_BUILD_AND_TEST_DEBUG
-
-windows_2_task:
-  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
-  dummy_script:
-    - refreshenv
-    - git clone https://github.com/larry-robotics/elkodon
-    - cd elkodon
-    - cargo build --workspace --all --examples
-  <<: *ELK_WINDOWS_BUILD_AND_TEST_RELEASE
-
-
-windows_3_task:
-  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
-  dummy_script:
-    - refreshenv
-    - setx path "C:\cargo\bin;%path%"
-    - git clone https://github.com/larry-robotics/elkodon
-    - cd elkodon
-    - rustup default stable
-    - cargo build --workspace --all --examples
-  <<: *ELK_WINDOWS_BUILD_AND_TEST_DEBUG
+# windows_server_2019_x64_stable_debug_task:
+#   # depends_on: preflight_check
+#   <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+#   setup_rust_script:
+#     - refreshenv
+#     - rustup default stable
+#   <<: *ELK_WINDOWS_BUILD_AND_TEST_RELEASE
+#
+# windows_0_task:
+#   # depends_on: preflight_check
+#   <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+#   dummy_script:
+#     - refreshenv
+#   <<: *ELK_WINDOWS_BUILD_AND_TEST_RELEASE
+#
+# windows_1_task:
+#   <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+#   dummy_script:
+#     - refreshenv
+#     - git clone https://github.com/larry-robotics/elkodon
+#     - cd elkodon
+#     - rustup default stable
+#     - cargo build --workspace --all --examples
+#   <<: *ELK_WINDOWS_BUILD_AND_TEST_DEBUG
+#
+# windows_2_task:
+#   <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+#   dummy_script:
+#     - refreshenv
+#     - git clone https://github.com/larry-robotics/elkodon
+#     - cd elkodon
+#     - cargo build --workspace --all --examples
+#   <<: *ELK_WINDOWS_BUILD_AND_TEST_RELEASE
+#
+#
+# windows_3_task:
+#   <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+#   dummy_script:
+#     - refreshenv
+#     - setx path "C:\cargo\bin;%path%"
+#     - git clone https://github.com/larry-robotics/elkodon
+#     - cd elkodon
+#     - rustup default stable
+#     - cargo build --workspace --all --examples
+#   <<: *ELK_WINDOWS_BUILD_AND_TEST_DEBUG
 
 windows_4_task:
   <<: *ELK_TASK_TIMEOUT
