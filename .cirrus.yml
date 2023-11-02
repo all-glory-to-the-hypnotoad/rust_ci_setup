@@ -200,8 +200,9 @@ windows_5_task:
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
     - cargo --version
-    - refreshenv
+  build_script:
     - cargo build --workspace --all --examples
+  test_script:
     - cargo test --workspace --all
 
 windows_6_task:
@@ -218,7 +219,6 @@ windows_6_task:
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
     - cargo --version
-    - refreshenv
     - cargo build --workspace --all --examples
     - cargo test --workspace --all
 
