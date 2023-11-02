@@ -137,9 +137,10 @@ elk_windows_build_and_test_release_template: &ELK_WINDOWS_BUILD_AND_TEST_RELEASE
 freebsd_x64_stable_debug_1_task:
   <<: *ELK_CONTAINER_FREEBSD_X64
   env:
-    PATH: /cargo/bin:$PATH
+    PATH: /.cargo/bin:$PATH
     HOME: /root
   install_dependencies_script:
+    - echo $HOME
     - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path
     - ls -la /root
     - ls -la /root/.cargo
@@ -153,9 +154,11 @@ freebsd_x64_stable_debug_1_task:
 freebsd_x64_stable_debug_2_task:
   <<: *ELK_CONTAINER_FREEBSD_X64
   env:
-    PATH: /root/cargo/bin:$PATH
+    PATH: /root/.cargo/bin:$PATH
     HOME: /root
   install_dependencies_script:
+    - echo $HOME
+    - set HOME=/root
     - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path
     - ls -laR /root
     - pwd
