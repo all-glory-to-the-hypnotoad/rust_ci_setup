@@ -24,6 +24,8 @@ RUN [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::Sec
     [Environment]::SetEnvironmentVariable('Path', $env:Path + ';C:\cargo\bin', [EnvironmentVariableTarget]::User); \
     C:\rustup-init.exe -y -v --no-modify-path --default-toolchain stable --default-host x86_64-pc-windows-msvc; \
     Remove-Item C:\rustup-init.exe; \
+    Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1; \
+    refreshenv; \
     rustup -V; \
     cargo -V; \
     rustc -V

@@ -10,6 +10,8 @@ RUN choco install -y llvm; \
     [Environment]::SetEnvironmentVariable('Path', $env:Path + ';C:\Program Files\LLVM\bin', [EnvironmentVariableTarget]::Machine); \
     [Environment]::SetEnvironmentVariable('Path', $env:Path + ';C:\Program Files\LLVM\bin', [EnvironmentVariableTarget]::Process); \
     [Environment]::SetEnvironmentVariable('Path', $env:Path + ';C:\Program Files\LLVM\bin', [EnvironmentVariableTarget]::User); \
+    Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1; \
+    refreshenv; \
     Remove-Item C:\ProgramData\chocolatey\logs\* -Force -Recurse ; \
     Remove-Item $Env:localappdata\Nuget\Cache\*nupkg ; \
     Remove-Item $Env:temp\* -Force -Recurse
