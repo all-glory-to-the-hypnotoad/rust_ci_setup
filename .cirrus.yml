@@ -119,11 +119,7 @@ windows_1_task:
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
     - rustup default beta
-  build_script:
-    - cargo --version
-    - cargo build --workspace --all --examples
-  test_script:
-    - cargo test --workspace --all
+  <<: *ELK_COMMON_BUILD_AND_TEST_DEBUG
 
 windows_2_task:
   <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
@@ -131,11 +127,7 @@ windows_2_task:
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
     - rustup default stable
-  build_script:
-    - cargo --version
-    - cargo build --workspace --all --examples
-  test_script:
-    - cargo test --workspace --all
+  <<: *ELK_COMMON_BUILD_AND_TEST_RELEASE
 
 
 windows_3.1_task:
@@ -143,10 +135,8 @@ windows_3.1_task:
   dummy_script:
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
-  build_script:
     - cargo --version
     - cargo build --workspace --all --examples
-  test_script:
     - cargo test --workspace --all
 
 windows_3.2_task:
@@ -154,7 +144,6 @@ windows_3.2_task:
   dummy_script:
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
-  build_script:
     - cargo --version
     - cargo build --workspace --all --examples
   test_script:
@@ -198,7 +187,6 @@ windows_4.2_task:
     - cargo --version
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
-  build_script:
     - cargo --version
     - cargo build --workspace --all --examples
   test_script:
