@@ -176,7 +176,7 @@ windows_5_task:
     - refreshenv
     - cargo build --workspace --all --examples
 
-windows_5_task:
+windows_6_task:
   <<: *ELK_TASK_TIMEOUT
   windows_container:
     image: cirrusci/windowsservercore:visualstudio2022-2022.06.23
@@ -192,7 +192,7 @@ windows_5_task:
     - refreshenv
     - cargo build --workspace --all --examples
 
-windows_6_task:
+windows_7_task:
   <<: *ELK_TASK_TIMEOUT
   windows_container:
     image: cirrusci/windowsservercore:visualstudio2022-2022.06.23
