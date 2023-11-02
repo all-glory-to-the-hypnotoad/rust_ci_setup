@@ -146,12 +146,60 @@ elk_windows_build_and_test_release_template: &ELK_WINDOWS_BUILD_AND_TEST_RELEASE
 #     - cargo build --workspace --all --examples
 #   <<: *ELK_WINDOWS_BUILD_AND_TEST_DEBUG
 
-windows_4_task:
+# windows_4_task:
+#   <<: *ELK_TASK_TIMEOUT
+#   windows_container:
+#     dockerfile: internal/docker/windowsservercore-2019-gnu
+#     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+#   dummy_script:
+#     - cargo --version
+#     - git clone https://github.com/larry-robotics/elkodon
+#     - cd elkodon
+#     - cargo --version
+#     - refreshenv
+#     - cargo build --workspace --all --examples
+
+
+windows_5_task:
   <<: *ELK_TASK_TIMEOUT
   windows_container:
-    dockerfile: internal/docker/windowsservercore-2019-gnu
+    image: cirrusci/windowsservercore:visualstudio2022-2022.06.23
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
   dummy_script:
+    - choco install rustup.install
+    - rustup toolchain default stable-msvc
+    - rustup component add rustfmt clippy
+    - rustfmt --version
+    - git clone https://github.com/larry-robotics/elkodon
+    - cd elkodon
+    - cargo --version
+    - refreshenv
+    - cargo build --workspace --all --examples
+
+windows_5_task:
+  <<: *ELK_TASK_TIMEOUT
+  windows_container:
+    image: cirrusci/windowsservercore:visualstudio2022-2022.06.23
+    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+  dummy_script:
+    - choco install rustup.install
+    - rustup default stable
+    - rustup component add rustfmt clippy
+    - rustfmt --version
+    - git clone https://github.com/larry-robotics/elkodon
+    - cd elkodon
+    - cargo --version
+    - refreshenv
+    - cargo build --workspace --all --examples
+
+windows_6_task:
+  <<: *ELK_TASK_TIMEOUT
+  windows_container:
+    image: cirrusci/windowsservercore:visualstudio2022-2022.06.23
+    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+  dummy_script:
+    - choco install rust-ms
+    - rustfmt --version
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
     - cargo --version
