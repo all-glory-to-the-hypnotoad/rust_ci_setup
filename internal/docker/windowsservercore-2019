@@ -8,7 +8,7 @@ SHELL ["powershell.exe", "-NoLogo", "-NoProfile", "-Command", "$ErrorActionPrefe
 RUN choco install -y rustup.install; \
     Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1; \
     refreshenv; \
-    rustup toolchain add beta; \
+    rustup toolchain add beta nightly; \
     rustup component add rustfmt clippy; \
     Remove-Item C:\ProgramData\chocolatey\logs\* -Force -Recurse ; \
     Remove-Item $Env:localappdata\Nuget\Cache\*nupkg ; \
