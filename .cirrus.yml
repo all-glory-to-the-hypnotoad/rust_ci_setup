@@ -142,7 +142,7 @@ freebsd_x64_stable_debug_1_task:
     PATH: /root/.cargo/bin:$PATH
     HOME: /root
   setup_script:
-    - pkg install -y git
+    - pkg install -y git clang
     - echo $HOME
     - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path
     - ls -la /root
