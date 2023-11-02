@@ -8,7 +8,7 @@ SHELL ["powershell.exe", "-NoLogo", "-NoProfile", "-Command", "$ErrorActionPrefe
 RUN choco install -y rustup.install; \
     Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1; \
     refreshenv; \
-    rustup toolchain default stable-msvc; \
+    rustup toolchain add beta; \
     rustup component add rustfmt clippy; \
     [Environment]::SetEnvironmentVariable('Path', $env:Path + ';C:\Program Files\LLVM\bin', [EnvironmentVariableTarget]::Machine); \
     [Environment]::SetEnvironmentVariable('Path', $env:Path + ';C:\Program Files\LLVM\bin', [EnvironmentVariableTarget]::Process); \

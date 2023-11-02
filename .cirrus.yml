@@ -143,7 +143,7 @@ windows_3_task:
     - cargo build --workspace --all --examples
     - cargo test --workspace --all
 
-windows_4_task:
+windows_4.1_task:
   <<: *ELK_TASK_TIMEOUT
   windows_container:
     dockerfile: internal/docker/windowsservercore-2019-gnu
@@ -155,6 +155,18 @@ windows_4_task:
     - cargo build --workspace --all --examples
     - cargo test --workspace --all
 
+windows_4.2_task:
+  <<: *ELK_TASK_TIMEOUT
+  windows_container:
+    dockerfile: internal/docker/windowsservercore-2019-gnu
+    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+  dummy_script:
+    - rustup default beta
+    - cargo --version
+    - git clone https://github.com/larry-robotics/elkodon
+    - cd elkodon
+    - cargo build --workspace --all --examples
+    - cargo test --workspace --all
 
 windows_5_task:
   <<: *ELK_TASK_TIMEOUT
@@ -164,7 +176,8 @@ windows_5_task:
   dummy_script:
     - choco install -y rustup.install
     - refreshenv
-    - rustup toolchain default stable-msvc
+    - rustup toolchain add stable-msvc
+    - rustup default stable-msvc
     - rustup component add rustfmt clippy
     - rustfmt --version
     - git clone https://github.com/larry-robotics/elkodon
@@ -182,7 +195,7 @@ windows_6_task:
   dummy_script:
     - choco install -y rustup.install
     - refreshenv
-    - rustup default stable
+    - rustup toolchain add beta
     - rustup component add rustfmt clippy
     - rustfmt --version
     - git clone https://github.com/larry-robotics/elkodon
@@ -202,7 +215,6 @@ windows_7_task:
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
     - cargo --version
-    - refreshenv
+    - rustfmt --version
     - cargo build --workspace --all --examples
     - cargo test --workspace --all
-    - rustfmt --version
