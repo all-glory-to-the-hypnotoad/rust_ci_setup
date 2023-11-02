@@ -126,7 +126,6 @@ windows_1_task:
 windows_2_task:
   <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
   dummy_script:
-    - Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
     - refreshenv
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
@@ -137,7 +136,6 @@ windows_2_task:
 windows_3_task:
   <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
   dummy_script:
-    - Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
     - refreshenv
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
@@ -165,7 +163,6 @@ windows_5_task:
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
   dummy_script:
     - choco install -y rustup.install
-    - Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
     - refreshenv
     - rustup toolchain default stable-msvc
     - rustup component add rustfmt clippy
@@ -184,7 +181,6 @@ windows_6_task:
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
   dummy_script:
     - choco install -y rustup.install
-    - Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
     - refreshenv
     - rustup default stable
     - rustup component add rustfmt clippy
