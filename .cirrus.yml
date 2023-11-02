@@ -50,16 +50,28 @@ elk_container_windows_server_2019_x64_template: &ELK_CONTAINER_WINDOWS_SERVER_20
 elk_common_build_and_test_debug_template: &ELK_COMMON_BUILD_AND_TEST_DEBUG
   env:
     RUSTDOCFLAGS: -D warnings
-  build_script: cargo build --workspace --all --examples
-  doc_script: cargo doc
-  test_script: cargo test --workspace --all
+  build_script:
+    - cd elkodon
+    - cargo build --workspace --all --examples
+  doc_script:
+    - cd elkodon
+    - cargo doc
+  test_script:
+    - cd elkodon
+    - cargo test --workspace --all
 
 elk_common_build_and_test_release_template: &ELK_COMMON_BUILD_AND_TEST_RELEASE
   env:
     RUSTDOCFLAGS: -D warnings
-  build_script: cargo build --release --workspace --all --examples
-  doc_script: cargo doc --release
-  test_script: cargo test --release --workspace --all
+  build_script:
+    - cd elkodon
+    - cargo build --release --workspace --all --examples
+  doc_script:
+    - cd elkodon
+    - cargo doc --release
+  test_script:
+    - cd elkodon
+    - cargo test --release --workspace --all
 
 elk_windows_build_and_test_debug_template: &ELK_WINDOWS_BUILD_AND_TEST_DEBUG
   env:
@@ -147,18 +159,20 @@ windows_3.2_task:
     - cargo --version
     - cargo build --workspace --all --examples
   test_script:
+    - cd elkodon
     - cargo test --workspace --all
 
 windows_3.3_task:
   <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
   dummy_script:
     - git clone https://github.com/larry-robotics/elkodon
-    - cd elkodon
     - rustup default stable
   build_script:
+    - cd elkodon
     - cargo --version
     - cargo build --workspace --all --examples
   test_script:
+    - cd elkodon
     - cargo test --workspace --all
 
 windows_4.1_task:
@@ -170,11 +184,12 @@ windows_4.1_task:
     - rustup default stable
     - cargo --version
     - git clone https://github.com/larry-robotics/elkodon
-    - cd elkodon
   build_script:
+    - cd elkodon
     - cargo --version
     - cargo build --workspace --all --examples
   test_script:
+    - cd elkodon
     - cargo test --workspace --all
 
 windows_4.2_task:
@@ -190,6 +205,7 @@ windows_4.2_task:
     - cargo --version
     - cargo build --workspace --all --examples
   test_script:
+    - cd elkodon
     - cargo test --workspace --all
 
 # windows_5_task:
