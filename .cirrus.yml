@@ -140,7 +140,8 @@ freebsd_x64_stable_debug_1_task:
     PATH: /cargo/bin:$PATH
   install_dependencies_script:
     - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path
-    - ls -la
+    - ls -la /
+    - ls -la /cargo
     - pwd
     - echo $HOME
     - echo $PATH
@@ -154,7 +155,7 @@ freebsd_x64_stable_debug_2_task:
     PATH: /root/cargo/bin:$PATH
   install_dependencies_script:
     - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path
-    - ls -la
+    - ls -laR /root
     - pwd
     - echo $HOME
     - echo $PATH
