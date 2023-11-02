@@ -7,7 +7,9 @@ SHELL ["powershell.exe", "-NoLogo", "-NoProfile", "-Command", "$ErrorActionPrefe
 
 RUN choco install -y llvm; \
     choco install -y rust; \
-    refreshenv; \
+    [Environment]::SetEnvironmentVariable('Path', $env:Path + ';C:\Program Files\LLVM\bin', [EnvironmentVariableTarget]::Machine); \
+    [Environment]::SetEnvironmentVariable('Path', $env:Path + ';C:\Program Files\LLVM\bin', [EnvironmentVariableTarget]::Process); \
+    [Environment]::SetEnvironmentVariable('Path', $env:Path + ';C:\Program Files\LLVM\bin', [EnvironmentVariableTarget]::User); \
     Remove-Item C:\ProgramData\chocolatey\logs\* -Force -Recurse ; \
     Remove-Item $Env:localappdata\Nuget\Cache\*nupkg ; \
     Remove-Item $Env:temp\* -Force -Recurse
