@@ -166,10 +166,13 @@ windows_4.1_task:
     dockerfile: internal/docker/windowsservercore-2019-gnu
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
   dummy_script:
+    - rustup default stable
     - cargo --version
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
+  build_script:
     - cargo build --workspace --all --examples
+  test_script:
     - cargo test --workspace --all
 
 windows_4.2_task:
@@ -182,7 +185,9 @@ windows_4.2_task:
     - cargo --version
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
+  build_script:
     - cargo build --workspace --all --examples
+  test_script:
     - cargo test --workspace --all
 
 windows_5_task:
@@ -201,8 +206,10 @@ windows_5_task:
     - cd elkodon
     - cargo --version
   build_script:
+    - refreshenv
     - cargo build --workspace --all --examples
   test_script:
+    - refreshenv
     - cargo test --workspace --all
 
 windows_6_task:
@@ -219,7 +226,10 @@ windows_6_task:
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
     - cargo --version
+  build_script:
+    - refreshenv
     - cargo build --workspace --all --examples
+  test_script:
     - cargo test --workspace --all
 
 windows_7_task:
