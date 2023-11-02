@@ -119,7 +119,7 @@ windows_1_task:
     - refreshenv
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
-    - rustup default stable
+    - rustup default beta
     - cargo build --workspace --all --examples
     - cargo test --workspace --all
 
@@ -129,14 +129,31 @@ windows_2_task:
     - refreshenv
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
+    - rustup default stable
     - cargo build --workspace --all --examples
     - cargo test --workspace --all
 
 
-windows_3_task:
+windows_3.1_task:
   <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
   dummy_script:
     - refreshenv
+    - git clone https://github.com/larry-robotics/elkodon
+    - cd elkodon
+    - cargo build --workspace --all --examples
+    - cargo test --workspace --all
+
+windows_3.2_task:
+  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+  dummy_script:
+    - git clone https://github.com/larry-robotics/elkodon
+    - cd elkodon
+    - cargo build --workspace --all --examples
+    - cargo test --workspace --all
+
+windows_3.3_task:
+  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+  dummy_script:
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
     - rustup default stable
@@ -176,8 +193,8 @@ windows_5_task:
   dummy_script:
     - choco install -y rustup.install
     - refreshenv
-    - rustup toolchain add stable-msvc
-    - rustup default stable-msvc
+    - rustup toolchain add stable
+    - rustup default stable
     - rustup component add rustfmt clippy
     - rustfmt --version
     - git clone https://github.com/larry-robotics/elkodon
@@ -195,7 +212,7 @@ windows_6_task:
   dummy_script:
     - choco install -y rustup.install
     - refreshenv
-    - rustup toolchain add beta
+    # - rustup default stable
     - rustup component add rustfmt clippy
     - rustfmt --version
     - git clone https://github.com/larry-robotics/elkodon
@@ -215,6 +232,5 @@ windows_7_task:
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
     - cargo --version
-    - rustfmt --version
     - cargo build --workspace --all --examples
     - cargo test --workspace --all

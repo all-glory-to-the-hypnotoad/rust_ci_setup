@@ -3,29 +3,13 @@
 # Select base image
 FROM cirrusci/windowsservercore:visualstudio2022-2022.06.23
 
-ENV RUSTUP_HOME=C:\rustup \
-    CARGO_HOME=C:\cargo
-
 SHELL ["powershell.exe", "-NoLogo", "-NoProfile", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
-# RUN Invoke-WebRequest -Uri https://static.rust-lang.org/rustup/dist/x86_64-pc-windows-msvc/rustup-init.exe -OutFile C:\rustup-init.exe;
-# RUN Start-Process -Wait -FilePath C:\rustup-init.exe -ArgumentList 'install --default-toolchain stable -y';
-# RUN Remove-Item C:\rustup-init.exe;
-# RUN ls
-# RUN ls ${en:CARGO_HOME}
-# RUN rustup --version;
-# RUN cargo --version;
-
-RUN [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12; \
-    $url = 'https://static.rust-lang.org/rustup/dist/x86_64-pc-windows-msvc/rustup-init.exe'; \
-    Invoke-WebRequest -Uri $url -OutFile C:\rustup-init.exe; \
-    [Environment]::SetEnvironmentVariable('Path', $env:Path + ';C:\cargo\bin', [EnvironmentVariableTarget]::Machine); \
-    [Environment]::SetEnvironmentVariable('Path', $env:Path + ';C:\cargo\bin', [EnvironmentVariableTarget]::Process); \
-    [Environment]::SetEnvironmentVariable('Path', $env:Path + ';C:\cargo\bin', [EnvironmentVariableTarget]::User); \
-    C:\rustup-init.exe -y -v --no-modify-path --default-toolchain stable --default-host x86_64-pc-windows-msvc; \
-    Remove-Item C:\rustup-init.exe; \
-    Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1; \
+RUN choco install -y rustup.install; \
+    #Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1; \
     refreshenv; \
-    rustup -V; \
-    cargo -V; \
-    rustc -V
+    rustup toolchain add beta; \
+    rustup component add rustfmt clippy; \
+    Remove-Item C:\ProgramData\chocolatey\logs\* -Force -Recurse ; \
+    Remove-Item $Env:localappdata\Nuget\Cache\*nupkg ; \
+    Remove-Item $Env:temp\* -Force -Recurse
