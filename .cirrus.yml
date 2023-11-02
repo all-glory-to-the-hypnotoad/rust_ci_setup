@@ -57,6 +57,7 @@ elk_container_freebsd_x64_template: &ELK_CONTAINER_FREEBSD_X64
 elk_common_build_and_test_debug_template: &ELK_COMMON_BUILD_AND_TEST_DEBUG
   env:
     RUSTDOCFLAGS: -D warnings
+  clone_script: git clone https://github.com/larry-robotics/elkodon
   build_script:
     - cd elkodon
     - cargo build --workspace --all --examples
@@ -70,6 +71,7 @@ elk_common_build_and_test_debug_template: &ELK_COMMON_BUILD_AND_TEST_DEBUG
 elk_common_build_and_test_release_template: &ELK_COMMON_BUILD_AND_TEST_RELEASE
   env:
     RUSTDOCFLAGS: -D warnings
+  clone_script: git clone https://github.com/larry-robotics/elkodon
   build_script:
     - cd elkodon
     - cargo build --release --workspace --all --examples
@@ -137,7 +139,7 @@ elk_windows_build_and_test_release_template: &ELK_WINDOWS_BUILD_AND_TEST_RELEASE
 freebsd_x64_stable_debug_1_task:
   <<: *ELK_CONTAINER_FREEBSD_X64
   env:
-    PATH: /.cargo/bin:$PATH
+    PATH: /root/.cargo/bin:$PATH
     HOME: /root
   install_dependencies_script:
     - echo $HOME
@@ -151,19 +153,19 @@ freebsd_x64_stable_debug_1_task:
   set_toolchain_script: rustup default stable
   <<: *ELK_COMMON_BUILD_AND_TEST_DEBUG
 
-freebsd_x64_stable_debug_2_task:
-  <<: *ELK_CONTAINER_FREEBSD_X64
-  env:
-    PATH: /root/.cargo/bin:$PATH
-    HOME: /root
-  install_dependencies_script:
-    - echo $HOME
-    - set HOME=/root
-    - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path
-    - ls -laR /root
-    - pwd
-    - echo $HOME
-    - echo $PATH
-    - rustup component add clippy rustfmt
-  set_toolchain_script: rustup default stable
-  <<: *ELK_COMMON_BUILD_AND_TEST_DEBUG
+# freebsd_x64_stable_debug_2_task:
+#   <<: *ELK_CONTAINER_FREEBSD_X64
+#   env:
+#     PATH: /root/.cargo/bin:$PATH
+#     HOME: /root
+#   install_dependencies_script:
+#     - echo $HOME
+#     - set HOME=/root
+#     - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path
+#     - ls -laR /root
+#     - pwd
+#     - echo $HOME
+#     - echo $PATH
+#     - rustup component add clippy rustfmt
+#   set_toolchain_script: rustup default stable
+#   <<: *ELK_COMMON_BUILD_AND_TEST_DEBUG
