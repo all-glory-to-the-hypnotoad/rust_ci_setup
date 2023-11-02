@@ -141,7 +141,8 @@ freebsd_x64_stable_debug_1_task:
   env:
     PATH: /root/.cargo/bin:$PATH
     HOME: /root
-  install_dependencies_script:
+  setup_script:
+    - pkg install -y git
     - echo $HOME
     - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path
     - ls -la /root
