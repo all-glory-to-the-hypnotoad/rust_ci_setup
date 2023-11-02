@@ -45,6 +45,13 @@ elk_container_windows_server_2019_x64_template: &ELK_CONTAINER_WINDOWS_SERVER_20
     dockerfile: internal/docker/windowsservercore-2019
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
 
+
+elk_container_freebsd_x64_template: &ELK_CONTAINER_FREEBSD_X64
+  <<: *ELK_TASK_TIMEOUT
+  freebsd_instance:
+    image_family: freebsd-13-2
+    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+
 # Build and Teset
 
 elk_common_build_and_test_debug_template: &ELK_COMMON_BUILD_AND_TEST_DEBUG
@@ -76,6 +83,7 @@ elk_common_build_and_test_release_template: &ELK_COMMON_BUILD_AND_TEST_RELEASE
 elk_windows_build_and_test_debug_template: &ELK_WINDOWS_BUILD_AND_TEST_DEBUG
   env:
     RUSTDOCFLAGS: -D warnings
+  clone_script: git clone https://github.com/larry-robotics/elkodon
   build_script: cargo build --workspace --all --benches
   doc_script: cargo doc
   test_script: cargo test --workspace --all
@@ -83,6 +91,7 @@ elk_windows_build_and_test_debug_template: &ELK_WINDOWS_BUILD_AND_TEST_DEBUG
 elk_windows_build_and_test_release_template: &ELK_WINDOWS_BUILD_AND_TEST_RELEASE
   env:
     RUSTDOCFLAGS: -D warnings
+  clone_script: git clone https://github.com/larry-robotics/elkodon
   build_script: cargo build --release --workspace --all --benches
   doc_script: cargo doc --release
   test_script: cargo test --release --workspace --all
@@ -112,93 +121,33 @@ elk_windows_build_and_test_release_template: &ELK_WINDOWS_BUILD_AND_TEST_RELEASE
 #  <<: *ELK_COMMON_BUILD_AND_TEST_RELEASE
 
 
-windows_server_2019_x64_stable_debug_task:
-  # depends_on: preflight_check
-  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
-  setup_rust_script:
-    - rustup default stable
-  <<: *ELK_WINDOWS_BUILD_AND_TEST_RELEASE
+#windows_server_2019_x64_stable_debug_task:
+#  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+#  dummy_script:
+#    - git clone https://github.com/larry-robotics/elkodon
+#    - rustup default stable
+#  build_script:
+#    - cd elkodon
+#    - cargo --version
+#    - cargo build --workspace --all --examples
+#  test_script:
+#    - cd elkodon
+#    - cargo test --workspace --all
 
-windows_0_task:
-  # depends_on: preflight_check
-  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
-  setup_rust_script:
-    - rustup default nightly
-  <<: *ELK_WINDOWS_BUILD_AND_TEST_RELEASE
-
-windows_1_task:
-  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
-  dummy_script:
-    - git clone https://github.com/larry-robotics/elkodon
-    - cd elkodon
-    - rustup default beta
+freebsd_x64_stable_debug_1_task:
+  <<: *ELK_CONTAINER_FREEBSD_X64
+  install_dependencies_script:
+    - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal
+    - ls -la
+    - ustup component add clippy rustfmt
+  set_toolchain_script: rustup default stable
   <<: *ELK_COMMON_BUILD_AND_TEST_DEBUG
 
-windows_2_task:
-  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
-  dummy_script:
-    - git clone https://github.com/larry-robotics/elkodon
-    - cd elkodon
-    - rustup default stable
-  <<: *ELK_COMMON_BUILD_AND_TEST_RELEASE
-
-
-windows_3.1_task:
-  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
-  dummy_script:
-    - git clone https://github.com/larry-robotics/elkodon
-    - cd elkodon
-    - cargo --version
-    - cargo build --workspace --all --examples
-    - cargo test --workspace --all
-
-windows_3.2_task:
-  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
-  dummy_script:
-    - git clone https://github.com/larry-robotics/elkodon
-    - cd elkodon
-    - cargo --version
-    - cargo build --workspace --all --examples
-  test_script:
-    - cd elkodon
-    - cargo test --workspace --all
-
-windows_3.3_task:
-  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
-  dummy_script:
-    - git clone https://github.com/larry-robotics/elkodon
-    - rustup default stable
-  build_script:
-    - cd elkodon
-    - cargo --version
-    - cargo build --workspace --all --examples
-  test_script:
-    - cd elkodon
-    - cargo test --workspace --all
-
-windows_4.1_task:
-  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
-  dummy_script:
-    - rustup default stable
-    - cargo --version
-    - git clone https://github.com/larry-robotics/elkodon
-  build_script:
-    - cd elkodon
-    - cargo --version
-    - cargo build --workspace --all --examples
-  test_script:
-    - cd elkodon
-    - cargo test --workspace --all
-
-windows_4.2_task:
-  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
-  dummy_script:
-    - rustup default beta
-    - cargo --version
-    - git clone https://github.com/larry-robotics/elkodon
-    - cd elkodon
-    - cargo --version
-    - cargo build --workspace --all --examples
-  test_script:
-    - cd elkodon
-    - cargo test --workspace --all
+freebsd_x64_stable_debug_2_task:
+  <<: *ELK_CONTAINER_FREEBSD_X64
+  install_dependencies_script:
+    - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path
+    - ls -la
+    - ustup component add clippy rustfmt
+  set_toolchain_script: rustup default stable
+  <<: *ELK_COMMON_BUILD_AND_TEST_DEBUG
