@@ -42,7 +42,7 @@ elk_container_ubuntu_22_04_x64_template: &ELK_CONTAINER_UBUNTU_22_04_X64
 elk_container_windows_server_2019_x64_template: &ELK_CONTAINER_WINDOWS_SERVER_2019_X64
   <<: *ELK_TASK_TIMEOUT
   windows_container:
-    dockerfile: internal/docker/windowsservercore-2019
+    dockerfile: internal/docker/windowsservercore-2019-msvc
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
 
 # Build and Teset
@@ -149,14 +149,11 @@ windows_3_task:
 windows_4_task:
   <<: *ELK_TASK_TIMEOUT
   windows_container:
-    image: cirrusci/windowsservercore:visualstudio2022-2022.06.23
+    dockerfile: internal/docker/windowsservercore-2019-gnu
     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
-  install_deps_script:
-    - choco install -y llvm
-    - choco install -y rust
-    - refreshenv
   dummy_script:
     - git clone https://github.com/larry-robotics/elkodon
     - cd elkodon
     - cargo --version
+    - refreshenv
     - cargo build --workspace --all --examples

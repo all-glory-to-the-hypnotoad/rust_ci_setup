@@ -1,0 +1,13 @@
+# syntax=docker/dockerfile:1
+
+# Select base image
+FROM cirrusci/windowsservercore:visualstudio2022-2022.06.23
+
+SHELL ["powershell.exe", "-NoLogo", "-NoProfile", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
+
+RUN choco install -y llvm; \
+    choco install -y rust; \
+    refreshenv; \
+    Remove-Item C:\ProgramData\chocolatey\logs\* -Force -Recurse ; \
+    Remove-Item $Env:localappdata\Nuget\Cache\*nupkg ; \
+    Remove-Item $Env:temp\* -Force -Recurse
