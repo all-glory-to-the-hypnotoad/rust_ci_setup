@@ -139,7 +139,8 @@ freebsd_x64_stable_debug_1_task:
   install_dependencies_script:
     - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal
     - ls -la
-    - ustup component add clippy rustfmt
+    - pwd
+    - rustup component add clippy rustfmt
   set_toolchain_script: rustup default stable
   <<: *ELK_COMMON_BUILD_AND_TEST_DEBUG
 
@@ -148,6 +149,7 @@ freebsd_x64_stable_debug_2_task:
   install_dependencies_script:
     - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path
     - ls -la
-    - ustup component add clippy rustfmt
+    - pwd
+    - rustup component add clippy rustfmt
   set_toolchain_script: rustup default stable
   <<: *ELK_COMMON_BUILD_AND_TEST_DEBUG
