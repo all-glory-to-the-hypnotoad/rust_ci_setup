@@ -118,6 +118,7 @@ task:
   script:
     - echo $CIRRUS_PR
     - echo $CIRRUS_BRANCH
+    - echo foo
 
 # only_if: $CIRRUS_BRANCH == 'main'
 # only_if: $CIRRUS_PR > 0
