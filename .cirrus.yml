@@ -112,7 +112,7 @@ elk_windows_build_and_test_release_template: &ELK_WINDOWS_BUILD_AND_TEST_RELEASE
 #
 
 # only_if: $CIRRUS_BRANCH == 'main'
-only_if: $CIRRUS_PR
+only_if: $CIRRUS_PR > 0
 
 #preflight_check_task:
 #  <<: *ELK_CONTAINER_UBUNTU_22_04_X64
