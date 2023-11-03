@@ -111,8 +111,14 @@ elk_windows_build_and_test_release_template: &ELK_WINDOWS_BUILD_AND_TEST_RELEASE
 # Ubuntu x86
 #
 
-# only_if: $CIRRUS_BRANCH == 'main'
-only_if: $CIRRUS_PR > 0
+task:
+  <<: *ELK_CONTAINER_UBUNTU_22_04_X64
+  script:
+    - echo $CIRRUS_PR
+    - ehco $CIRRUS_BRANCH
+
+only_if: $CIRRUS_BRANCH == 'main'
+# only_if: $CIRRUS_PR > 0
 
 #preflight_check_task:
 #  <<: *ELK_CONTAINER_UBUNTU_22_04_X64
