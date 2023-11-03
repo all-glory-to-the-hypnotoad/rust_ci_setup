@@ -136,6 +136,25 @@ elk_windows_build_and_test_release_template: &ELK_WINDOWS_BUILD_AND_TEST_RELEASE
 #    - cd elkodon
 #    - cargo test --workspace --all
 
+freebsd_x64_stable_debug_2_task:
+  <<: *ELK_CONTAINER_FREEBSD_X64
+# macos_aarch64_stable_debug_task:
+  # macos_instance:
+    # image: ghcr.io/cirruslabs/macos-ventura-base:latest
+  env:
+    PATH: /root/.cargo/bin:$PATH
+    HOME: /root
+  setup_script:
+    - cat /etc/group
+    - pw groupmod "root" wheel
+    - cat /etc/group
+    - pkg install -y git llvm
+    - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path
+    - rustup component add clippy rustfmt
+  set_toolchain_script: rustup default stable
+  <<: *ELK_COMMON_BUILD_AND_TEST_DEBUG
+
+
 macos_aarch64_stable_debug_task:
   <<: *ELK_TASK_TIMEOUT
   macos_instance:
@@ -152,20 +171,3 @@ macos_aarch64_stable_debug_task:
     - rustup component add clippy rustfmt
   set_toolchain_script: rustup default stable
   <<: *ELK_COMMON_BUILD_AND_TEST_DEBUG
-
-# freebsd_x64_stable_debug_2_task:
-#   <<: *ELK_CONTAINER_FREEBSD_X64
-#   env:
-#     PATH: /root/.cargo/bin:$PATH
-#     HOME: /root
-#   install_dependencies_script:
-#     - echo $HOME
-#     - set HOME=/root
-#     - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path
-#     - ls -laR /root
-#     - pwd
-#     - echo $HOME
-#     - echo $PATH
-#     - rustup component add clippy rustfmt
-#   set_toolchain_script: rustup default stable
-#   <<: *ELK_COMMON_BUILD_AND_TEST_DEBUG
