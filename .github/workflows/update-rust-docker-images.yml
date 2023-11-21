@@ -21,16 +21,12 @@ jobs:
           toolchain: stable
           components: llvm-tools-preview
 
-      - name: Get version of latest Rust release
+      - name: Get version of latest Rust release and update docker files
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path
           rustup install stable
           LATEST_RUST_RELEASE=$(rustc --version | cut -d' ' -f2)
-          echo "LATEST_RUST_RELEASE=$LATEST_RUST_RELEASE" >> $GITHUB_OUTPUT
-
-      - name: Update docker files
-        run: |
-          EXPECTED_RUST_VERSION_ENV="EXPECTED_RUST_VERSION='${{ steps.vars.outputs.LATEST_RUST_RELEASE }}'"
+          EXPECTED_RUST_VERSION_ENV="EXPECTED_RUST_VERSION='${LATEST_RUST_RELEASE}'"
           PATH_TO_DOCKER_FILES="internal/docker"
           find "${PATH_TO_DOCKER_FILES}" -type f -exec sed -i "s/EXPECTED_RUST_VERSION='.*'/${EXPECTED_RUST_VERSION_ENV}/" {} \;
           echo "LATEST_RUST_RELEASE: $LATEST_RUST_RELEASE"
