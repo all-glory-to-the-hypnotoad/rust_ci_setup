@@ -15,8 +15,8 @@ RUN choco install -y rustup.install; \
         Write-Host "Warning! Expected version is ''${EXPECTED_RUST_VERSION}'' but '''\"$INSTALLED_RUST_VERSION\"''' is found!"; \
         Write-Host "######################"; \
         Write-Host "$EXPECTED_RUST_VERSION"; \
-        Write-Host "'$EXPECTED_RUST_VERSION'";
-        Write-Host '''"$EXPECTED_RUST_VERSION"'''; \\
+        Write-Host "'$EXPECTED_RUST_VERSION'"; \
+        Write-Host '''"$EXPECTED_RUST_VERSION"'''; \
         Write-Host 'test ''"$EXPECTED_RUST_VERSION"''!'; \
         Write-Host 'test '''"$EXPECTED_RUST_VERSION"'''!'; \
         Write-Host 'test '"$EXPECTED_RUST_VERSION"'!'; \
