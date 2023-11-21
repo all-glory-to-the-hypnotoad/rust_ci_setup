@@ -14,7 +14,6 @@ RUN choco install -y rustup.install; \
         Write-Host "######################"; \
         Write-Host "$EXPECTED_RUST_VERSION"; \
         Write-Host "'$EXPECTED_RUST_VERSION'"; \
-        Write-Host 'test '"$EXPECTED_RUST_VERSION"'x'; \
     } \
     rustup toolchain add beta nightly; \
     rustup component add rustfmt clippy; \
