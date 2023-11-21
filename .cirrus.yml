@@ -147,13 +147,13 @@ ubuntu_nighlty_task:
 
 
 windows_server_2019_x64_stable_debug_task:
- <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
- dummy_script:
-   - git clone https://github.com/larry-robotics/elkodon
-   - rustup default stable
- build_script:
-   - cd elkodon
-   - cargo --version
+  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+  dummy_script:
+    - git clone https://github.com/larry-robotics/elkodon
+    - rustup default stable
+  build_script:
+    - cd elkodon
+    - cargo --version
  #   - cargo build --workspace --all --examples
  # test_script:
  #   - cd elkodon
