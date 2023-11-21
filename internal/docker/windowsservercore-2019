@@ -8,9 +8,9 @@ SHELL ["powershell.exe", "-NoLogo", "-NoProfile", "-Command", "$ErrorActionPrefe
 RUN choco install -y rustup.install; \
     Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1; \
     refreshenv; \
+    Write-Host "test test test"; \
     $INSTALLED_RUST_VERSION=(rustc --version) -split ' ' | Select-Object -Index 1; \
     $EXPECTED_RUST_VERSION="1.73.0"; \
-    Write-Host "#######"; \
     Write-Host "$EXPECTED_RUST_VERSION"; \
     Write-Host "`'$EXPECTED_RUST_VERSION`'"; \
     if ($INSTALLED_RUST_VERSION -ne $EXPECTED_RUST_VERSION) { \
