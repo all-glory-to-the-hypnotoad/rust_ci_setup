@@ -11,7 +11,7 @@ RUN choco install -y rustup.install; \
     $INSTALLED_RUST_VERSION=(rustc --version) -split ' ' | Select-Object -Index 1; \
     $EXPECTED_RUST_VERSION="1.73.0"; \
     if ($INSTALLED_RUST_VERSION -ne $EXPECTED_RUST_VERSION) { \
-        Write-Host "Warning! Expected version is '${EXPECTED_RUST_VERSION}' but '${INSTALLED_RUST_VERSION}' is found!" \
+        Write-Host "Warning! Expected version is '$EXPECTED_RUST_VERSION' but '$INSTALLED_RUST_VERSION' is found!"; \
     } \
     rustup toolchain add beta nightly; \
     rustup component add rustfmt clippy; \

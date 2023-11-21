@@ -22,9 +22,9 @@ RUN echo "#### Installing dependencies" \
   && echo "#### Install minimal Rust toolchain" \
   && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path \
   && echo "#### Checking Rust version" \
-  && INSTALLED_RUST_VERSION=$(rustc --version | cut -d' ' -f2) \
-  && EXPECTED_RUST_VERSION="1.73.0" \
-  && if [[ "${INSTALLED_RUST_VERSION}" != "${EXPECTED_RUST_VERSION}" ]]; then \
+  && export INSTALLED_RUST_VERSION=$(rustc --version | cut -d' ' -f2) \
+  && export EXPECTED_RUST_VERSION="1.73.0" \
+  && if [ "${INSTALLED_RUST_VERSION}" != "${EXPECTED_RUST_VERSION}" ]; then \
        echo "Warning! Expected version is '${EXPECTED_RUST_VERSION}' but '${INSTALLED_RUST_VERSION}' is found!"; \
      fi \
   && echo "#### Adding beta and nightly toolchain" \
