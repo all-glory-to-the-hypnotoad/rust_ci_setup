@@ -113,13 +113,13 @@ elk_windows_build_and_test_release_template: &ELK_WINDOWS_BUILD_AND_TEST_RELEASE
 
 only_if: $CIRRUS_BRANCH == 'main' || ($CIRRUS_PR != '' && $CIRRUS_BASE_BRANCH == 'main')
 
-task:
-  <<: *ELK_CONTAINER_UBUNTU_22_04_X64
-  script:
-    - echo $CIRRUS_PR
-    - echo $CIRRUS_BRANCH
-    - echo foo
-    - echo bar
+# task:
+#   <<: *ELK_CONTAINER_UBUNTU_22_04_X64
+#   script:
+#     - echo $CIRRUS_PR
+#     - echo $CIRRUS_BRANCH
+#     - echo foo
+#     - echo bar
 
 # only_if: $CIRRUS_BRANCH == 'main'
 # only_if: $CIRRUS_PR > 0
