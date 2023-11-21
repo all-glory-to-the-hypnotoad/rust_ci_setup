@@ -31,7 +31,7 @@ jobs:
       run: |
         export EXPECTED_RUST_VERSION_ENV="EXPECTED_RUST_VERSION=\"${LATEST_RUST_RELEASE}\""
         export PATH_TO_DOCKER_FILES="internal/docker"
-        find "${PATH_TO_DOCKER_FILES}" -type f -exec sed -i "s/EXPECTED_RUST_VERSION=\".*\"/${EXPECTED_RUST_VERSION_ENV}/" {} \;
+        find "${PATH_TO_DOCKER_FILES}" -type f -exec sed -i "s/EXPECTED_RUST_VERSION='.*'/${EXPECTED_RUST_VERSION_ENV}/" {} \;
 
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v5
