@@ -1,0 +1,193 @@
+#
+# Notes
+#
+# Cirrus CI has a concurrency limit of 24 CPU cores for open source projects.
+# This means we should not have more than 12 pipelines with more than 2 CPUs
+# in each pipeline running parallel
+#
+# Documentation:
+# - https://cirrus-ci.org/examples/
+# - https://cirrus-ci.org/guide/writing-tasks/
+#
+
+# TODO:
+# - https://github.com/marketplace/actions/create-pull-request
+# - https://peterevans.dev/posts/github-actions-how-to-create-pull-requests-automatically/
+#
+# - https://forge.rust-lang.org/infra/other-installation-methods.html#rustup
+
+---
+
+#
+# Templates
+#
+
+# Constants
+
+elk_task_timeout_template: &ELK_TASK_TIMEOUT
+  timeout_in: 15m # This needs to be reasonable large in order not to run in a timeout in the docker image re-builds
+
+elk_common_cpu_and_memory_config_for_build_and_test_template: &ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+  cpu: 2
+  memory: 4GB
+
+# Container
+
+elk_container_ubuntu_22_04_x64_template: &ELK_CONTAINER_UBUNTU_22_04_X64
+  <<: *ELK_TASK_TIMEOUT
+  container:
+    dockerfile: internal/docker/ubuntu-22.04
+    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+
+elk_container_windows_server_2019_x64_template: &ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+  <<: *ELK_TASK_TIMEOUT
+  windows_container:
+    dockerfile: internal/docker/windowsservercore-2019
+    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+
+
+elk_container_freebsd_x64_template: &ELK_CONTAINER_FREEBSD_X64
+  <<: *ELK_TASK_TIMEOUT
+  freebsd_instance:
+    image_family: freebsd-13-2
+    <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+
+# Build and Teset
+
+elk_common_build_and_test_debug_template: &ELK_COMMON_BUILD_AND_TEST_DEBUG
+  env:
+    RUSTDOCFLAGS: -D warnings
+  clone_script: git clone https://github.com/larry-robotics/elkodon
+  build_script:
+    - cd elkodon
+    - cargo build --workspace --all --examples
+  doc_script:
+    - cd elkodon
+    - cargo doc
+  test_script:
+    - cd elkodon
+    - cargo test -p elkodon_pal_concurrency_primitives
+                 -p elkodon_pal_posix
+                 -p elkodon_bb_container
+                 -p elkodon_bb_elementary
+                 -p elkodon_bb_lock_free
+                 -p elkodon_bb_log
+                 -p elkodon_bb_memory
+                 -p elkodon_bb_system_types
+                 -p elkodon_bb_testing
+                 --workspace --all
+
+elk_common_build_and_test_release_template: &ELK_COMMON_BUILD_AND_TEST_RELEASE
+  env:
+    RUSTDOCFLAGS: -D warnings
+  clone_script: git clone https://github.com/larry-robotics/elkodon
+  build_script:
+    - cd elkodon
+    - cargo build --release --workspace --all --examples
+  doc_script:
+    - cd elkodon
+    - cargo doc --release
+  test_script:
+    - cd elkodon
+    - cargo test --release --workspace --all
+
+elk_windows_build_and_test_debug_template: &ELK_WINDOWS_BUILD_AND_TEST_DEBUG
+  env:
+    RUSTDOCFLAGS: -D warnings
+  clone_script: git clone https://github.com/larry-robotics/elkodon
+  build_script: cargo build --workspace --all --benches
+  doc_script: cargo doc
+  test_script: cargo test --workspace --all
+
+elk_windows_build_and_test_release_template: &ELK_WINDOWS_BUILD_AND_TEST_RELEASE
+  env:
+    RUSTDOCFLAGS: -D warnings
+  clone_script: git clone https://github.com/larry-robotics/elkodon
+  build_script: cargo build --release --workspace --all --benches
+  doc_script: cargo doc --release
+  test_script: cargo test --release --workspace --all
+
+#
+# Ubuntu x86
+#
+
+only_if: $CIRRUS_BRANCH == 'main' || ($CIRRUS_PR != '' && $CIRRUS_BASE_BRANCH == 'main')
+
+task:
+  <<: *ELK_CONTAINER_UBUNTU_22_04_X64
+  script:
+    - echo $CIRRUS_PR
+    - echo $CIRRUS_BRANCH
+    - echo foo
+    - echo bar
+
+# only_if: $CIRRUS_BRANCH == 'main'
+# only_if: $CIRRUS_PR > 0
+
+#preflight_check_task:
+#  <<: *ELK_CONTAINER_UBUNTU_22_04_X64
+  # registry_cache:
+  #   folder: $CARGO_HOME/registry
+  #   fingerprint_script: cat Cargo.lock
+  # target_cache:
+  #   folder: target
+  #   fingerprint_script:
+  #     - rustc --version
+  #     - cat Cargo.lock
+#  set_toolchain_script: rustup default beta
+#  <<: *ELK_COMMON_BUILD_AND_TEST_DEBUG
+  # before_cache_script: rm -rf $CARGO_HOME/registry/index
+
+ubuntu_nighlty_task:
+  only_if: $CIRRUS_BRANCH == 'main'
+  # depends_on: preflight_check
+  <<: *ELK_CONTAINER_UBUNTU_22_04_X64
+  set_toolchain_script: rustup default nightly
+  <<: *ELK_COMMON_BUILD_AND_TEST_RELEASE
+
+
+windows_server_2019_x64_stable_debug_task:
+  <<: *ELK_CONTAINER_WINDOWS_SERVER_2019_X64
+  dummy_script:
+    - git clone https://github.com/larry-robotics/elkodon
+    - rustup default stable
+  build_script:
+    - cd elkodon
+    - cargo --version
+ #   - cargo build --workspace --all --examples
+ # test_script:
+ #   - cd elkodon
+ #   - cargo test --workspace --all
+
+# freebsd_x64_stable_debug_2_task:
+#   <<: *ELK_CONTAINER_FREEBSD_X64
+#   env:
+#     PATH: /root/.cargo/bin:$PATH
+#     HOME: /root
+#   setup_script:
+#     - cat /etc/group
+#     - pw groupmod "root" wheel
+#     - cat /etc/group
+#     - pkg install -y git llvm
+#     - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path
+#     - rustup component add clippy rustfmt
+#   set_toolchain_script: rustup default stable
+#   <<: *ELK_COMMON_BUILD_AND_TEST_DEBUG
+
+
+# macos_aarch64_stable_debug_task:
+#   <<: *ELK_TASK_TIMEOUT
+#   macos_instance:
+#     image: ghcr.io/cirruslabs/macos-ventura-base:latest
+#     <<: *ELK_COMMON_CPU_AND_MEMORY_CONFIG_FOR_BUILD_AND_TEST
+#   env:
+#     PATH: /Users/admin/.cargo/bin:$PATH
+#   setup_script:
+#     - brew --version
+#     - echo pwd
+#     - echo $HOME
+#     - echo $PATH
+#     - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path
+#     - rustup component add clippy rustfmt
+#   set_toolchain_script: rustup default stable
+#   <<: *ELK_COMMON_BUILD_AND_TEST_DEBUG
