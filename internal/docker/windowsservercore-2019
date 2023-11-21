@@ -10,6 +10,9 @@ RUN choco install -y rustup.install; \
     refreshenv; \
     $INSTALLED_RUST_VERSION=(rustc --version) -split ' ' | Select-Object -Index 1; \
     $EXPECTED_RUST_VERSION="1.73.0"; \
+    Write-Host "#######"; \
+    Write-Host "$EXPECTED_RUST_VERSION"; \
+    Write-Host "`'$EXPECTED_RUST_VERSION`'"; \
     if ($INSTALLED_RUST_VERSION -ne $EXPECTED_RUST_VERSION) { \
         Write-Host "Warning! Expected version is \'\"${EXPECTED_RUST_VERSION}\"\' but \'\"$INSTALLED_RUST_VERSION\"\' is found!"; \
     } \
