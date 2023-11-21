@@ -15,7 +15,7 @@ RUN Write-Host "#### Flup"; \
     Write-Host "$EXPECTED_RUST_VERSION"; \
     Write-Host "${EXPECTED_RUST_VERSION}"; \
     Write-Host "`'${EXPECTED_RUST_VERSION}`'"; \
-    Write-Host "\"${EXPECTED_RUST_VERSION}\""; \
+    Write-Host "\"${EXPECTED_RUST_VERSION}\""
 
 RUN choco install -y rustup.install; \
     Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1; \
