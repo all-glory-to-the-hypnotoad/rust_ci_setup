@@ -17,7 +17,7 @@ RUN echo "#### Installing dependencies" \
   && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path \
   && echo "#### Checking Rust version" \
   && export INSTALLED_RUST_VERSION=$(rustc --version | cut -d' ' -f2) \
-  && export EXPECTED_RUST_VERSION=1.73.0 \
+  && export EXPECTED_RUST_VERSION='1.73.0' \
   && if [ "${INSTALLED_RUST_VERSION}" != "${EXPECTED_RUST_VERSION}" ]; then \
        echo "Warning! Expected version is '${EXPECTED_RUST_VERSION}' but '${INSTALLED_RUST_VERSION}' is found!"; \
      fi \
