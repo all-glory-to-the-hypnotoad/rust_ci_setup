@@ -5,17 +5,22 @@ FROM cirrusci/windowsservercore:visualstudio2022-2022.06.23
 
 SHELL ["powershell.exe", "-NoLogo", "-NoProfile", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
-RUN Write-Host "WTF WFT"
+RUN Write-Host "WTF WFT";
 
 RUN Write-Host "WTF Aga Aga"; \
-    Write-Host "WTF aaaargh"
+    Write-Host "WTF aaaargh";
 
 RUN Write-Host "WTF Flup"; \
     $EXPECTED_RUST_VERSION="1.73.0"; \
     Write-Host "$EXPECTED_RUST_VERSION"; \
     Write-Host "${EXPECTED_RUST_VERSION}"; \
     Write-Host "`'${EXPECTED_RUST_VERSION}`'"; \
-    Write-Host "\"${EXPECTED_RUST_VERSION}\""
+    Write-Host "\"${EXPECTED_RUST_VERSION}\"";
+
+RUN echo "WTF Aaaaaaaaaaaaaaargh"; \
+    $EXPECTED_RUST_VERSION="1.73.0"; \
+    echo "Rust Version: '${EXPECTED_RUST_VERSION}'!"
+
 
 RUN choco install -y rustup.install; \
     Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1; \
