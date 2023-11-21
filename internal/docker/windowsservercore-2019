@@ -8,14 +8,14 @@ SHELL ["powershell.exe", "-NoLogo", "-NoProfile", "-Command", "$ErrorActionPrefe
 RUN Write-Host "WTF WFT";
 
 RUN Write-Host "WTF Aga Aga"; \
-    Write-Host "WTF aaaargh";
+    Write-Host "WTF aaaargh"
 
 RUN Write-Host "WTF Flup"; \
     $EXPECTED_RUST_VERSION="1.73.0"; \
     Write-Host "$EXPECTED_RUST_VERSION"; \
     Write-Host "${EXPECTED_RUST_VERSION}"; \
     Write-Host "`'${EXPECTED_RUST_VERSION}`'"; \
-    Write-Host "\"${EXPECTED_RUST_VERSION}\"";
+    Write-Host "\"${EXPECTED_RUST_VERSION}\""
 
 RUN echo "WTF Aaaaaaaaaaaaaaargh"; \
     $EXPECTED_RUST_VERSION="1.73.0"; \
